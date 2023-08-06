@@ -30,8 +30,6 @@ dependencies {
 	// JPA & Database
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
 	// Validations
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
@@ -43,10 +41,6 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
-
-	// Swagger
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
-
 	//
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7'
 
@@ -56,6 +50,9 @@ dependencies {
 	// Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64'
+
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j:8.0.31'
 
 }
 
