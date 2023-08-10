@@ -3,6 +3,7 @@ package com.scoup.server.service;
 import com.scoup.server.common.response.ErrorMessage;
 import com.scoup.server.controller.exception.NotFoundException;
 import com.scoup.server.domain.User;
+import com.scoup.server.dto.user.UpdateUserRequestDto;
 import com.scoup.server.dto.user.UserDateResponseDto;
 import com.scoup.server.repository.UserRepository;
 import java.util.Optional;
@@ -38,5 +39,12 @@ public class UserService {
         userRepository.deleteById(user.getId());
     }
 
+    @Transactional
+    public void patchUser(Long userId, UpdateUserRequestDto requestDto) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
+        user.updateUser(requestDto);
+    }
 
 }
