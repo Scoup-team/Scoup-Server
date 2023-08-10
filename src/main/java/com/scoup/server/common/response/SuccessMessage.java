@@ -21,6 +21,7 @@ public enum SuccessMessage {
      */
     GET_USER_DATA(OK, "유저 정보 조회에 성공했습니다."),
     DELETE_USER_SUCCESS(OK, "유저 삭제에 성공했습니다."),
+    PATCH_USER_SUCCESS(OK, "유저 수정에 성공했습니다."),
 
     /**
      * cafe

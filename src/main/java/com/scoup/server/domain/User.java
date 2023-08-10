@@ -1,5 +1,6 @@
 package com.scoup.server.domain;
 
+import com.scoup.server.dto.user.UpdateUserRequestDto;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,5 +37,10 @@ public class User {
 
     @Column(nullable = false)
     private Boolean master;
+
+    public void updateUser(UpdateUserRequestDto requestDto) {
+        this.nickname = requestDto.getNickname();
+        this.password = requestDto.getPassword();
+    }
 
 }
