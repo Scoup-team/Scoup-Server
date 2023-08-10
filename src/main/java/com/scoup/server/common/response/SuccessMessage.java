@@ -27,6 +27,7 @@ public enum SuccessMessage {
      * cafe
      */
     CREATE_VIDEO_SUCCESS(CREATED, "카페 생성에 성공했습니다."),
+    SEARCH_CAFE_SUCCESS(OK, "카페 검색에 성공했습니다."),
     ;
 
     private final HttpStatus httpStatus;
