@@ -28,4 +28,7 @@ public class Cafe {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String imageUrl;
+
 }
