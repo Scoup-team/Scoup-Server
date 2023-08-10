@@ -5,6 +5,7 @@ import com.scoup.server.common.response.SuccessMessage;
 import com.scoup.server.dto.user.UserDateResponseDto;
 import com.scoup.server.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,5 +24,13 @@ public class UserController {
     ) {
         UserDateResponseDto data = userService.getUser(userId);
         return ApiResponse.success(SuccessMessage.GET_USER_DATA, data);
+    }
+
+    @DeleteMapping
+    public ApiResponse deleteUser(
+        @RequestHeader Long userId
+    ) {
+        userService.deleteUser(userId);
+        return ApiResponse.success(SuccessMessage.DELETE_USER_SUCCESS);
     }
 }
