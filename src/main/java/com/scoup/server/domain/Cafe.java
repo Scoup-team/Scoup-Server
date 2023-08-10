@@ -31,4 +31,7 @@ public class Cafe {
     @Column(nullable = false)
     private String imageUrl;
 
+    @Column
+    private String branch;
+
 }

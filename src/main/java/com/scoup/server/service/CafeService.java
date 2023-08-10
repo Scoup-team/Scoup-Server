@@ -8,6 +8,7 @@ import com.scoup.server.dto.cafe.SearchCafeResponseDto;
 import com.scoup.server.repository.CafeRepository;
 import com.scoup.server.repository.UserRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,6 @@ public class CafeService {
 
         return cafeList.stream()
             .map(SearchCafeResponseDto::of)
-            .toList();
+            .collect(Collectors.toList());
     }
 }
