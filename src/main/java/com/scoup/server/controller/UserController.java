@@ -19,7 +19,7 @@ public class UserController {
 
     @GetMapping
     public ApiResponse<UserDateResponseDto> getUser(
-        @RequestHeader("userId") Long userId
+        @RequestHeader Long userId
     ) {
         UserDateResponseDto data = userService.getUser(userId);
         return ApiResponse.success(SuccessMessage.GET_USER_DATA, data);
