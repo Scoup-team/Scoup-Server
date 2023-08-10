@@ -19,7 +19,7 @@ public enum SuccessMessage {
     /**
      * user
      */
-
+    GET_USER_DATA(OK, "유저 정보 조회에 성공했습니다."),
 
     /**
      * cafe
