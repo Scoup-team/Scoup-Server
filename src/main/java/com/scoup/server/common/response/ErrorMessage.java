@@ -26,6 +26,18 @@ public enum ErrorMessage {
     /**
      * cafe
      */
+    NOT_FOUND_CAFE_EXCEPTION(NOT_FOUND, "카페를 찾을 수 없습니다."),
+    NOT_FOUND_MENU_EXCEPTION(NOT_FOUND, "메뉴를 찾을 수 없습니다."),
+
+    /**
+     * coupon
+     */
+    NOT_FOUND_COUPON_EXCEPTION(NOT_FOUND, "쿠폰을 찾을 수 없습니다."),
+
+    /**
+     * event
+     */
+    NOT_FOUND_EVENT_EXCEPTION(NOT_FOUND, "이벤트를 찾을 수 없습니다."),
 
 
     ;
