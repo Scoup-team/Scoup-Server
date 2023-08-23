@@ -1,5 +1,6 @@
 package com.scoup.server.domain;
 
+import com.scoup.server.dto.coupon.UpdateCouponRequestDto;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,5 +48,8 @@ public class Coupon {
     @JoinColumn(name="cafeId")
     private Cafe cafe;
 
+    public void updateCoupon(UpdateCouponRequestDto requestDto) {
+        this.used=requestDto.getUsed();
+    }
 
 }
