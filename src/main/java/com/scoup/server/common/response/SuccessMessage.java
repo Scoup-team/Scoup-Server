@@ -30,6 +30,10 @@ public enum SuccessMessage {
     CREATE_VIDEO_SUCCESS(CREATED, "카페 생성에 성공했습니다."),
     SEARCH_CAFE_SUCCESS(OK, "카페 검색에 성공했습니다."),
     ADD_CAFE_SUCCESS(OK, "카페 추가에 성공했습니다."),
+
+    /**
+     * cafe
+     */
     MENU_CHECK_SUCCESS(OK, "조회 성공하였습니다."),
 
     /**

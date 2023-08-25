@@ -11,5 +11,4 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
 
     @Query("select c from Cafe c where c.name like concat('%',:keyword,'%') order by c.name asc ")
     List<Cafe> findAllCafeContainingKeyword(@Param("keyword") String keyword);
-
 }
