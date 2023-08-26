@@ -4,6 +4,9 @@ import com.scoup.server.common.response.ErrorMessage;
 import com.scoup.server.controller.exception.NotFoundException;
 import com.scoup.server.domain.*;
 import com.scoup.server.dto.mainPage.MainPageCafeResponseDto;
+import com.scoup.server.domain.Cafe;
+import com.scoup.server.domain.User;
+import com.scoup.server.domain.UserOrder;
 import com.scoup.server.dto.mainPage.MainPageResponseDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
 import com.scoup.server.dto.user.UserDateResponseDto;
@@ -70,6 +73,7 @@ public class UserService {
         for(int i=0; i<cafeIdList.size(); i++) {
             Cafe c = cafeRepository.findById(cafeIdList.get(i))
                     .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+
             int stamp=(int)(userOrderList.stream().filter(a->a.getMenu().getCafe().equals(c)).count());
             List<String> tmpMenuList=new ArrayList<>();
             menuRepository.findByCafe_Id(cafeIdList.get(i)).stream().forEach(a->tmpMenuList.add(a.getName()));

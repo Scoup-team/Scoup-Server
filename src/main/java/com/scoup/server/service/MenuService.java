@@ -38,6 +38,7 @@ public class MenuService {
 		for(int i=0; i<menuList.size(); i++){
 			if(menuList.get(i).getUserOrderList().contains(userOrder)){
 				orderMenus.add(menuList.get(i).getName());
+
 			}
 		}
 
