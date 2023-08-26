@@ -39,7 +39,6 @@ public enum ErrorMessage {
      */
     NOT_FOUND_EVENT_EXCEPTION(NOT_FOUND, "이벤트를 찾을 수 없습니다."),
 
-
     ;
 
     private final HttpStatus httpStatus;

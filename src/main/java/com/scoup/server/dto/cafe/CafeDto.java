@@ -1,9 +1,10 @@
 package com.scoup.server.dto.cafe;
 
 import com.scoup.server.domain.Event;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @Builder
