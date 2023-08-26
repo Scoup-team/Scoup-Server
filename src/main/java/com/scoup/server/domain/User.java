@@ -1,22 +1,17 @@
 package com.scoup.server.domain;
 
-import com.scoup.server.dto.user.UpdateUserPasswordRequestDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -44,16 +39,14 @@ public class User {
     @Column(nullable = false)
     private Boolean master;
 
+    @Builder.Default
     @ElementCollection
     @CollectionTable(name="cafe_id_list", joinColumns=@JoinColumn(name="user_id"))
     private List<Long> cafeIdList=new ArrayList<>();
 
     public void updateUser(UpdateUserRequestDto requestDto) {
         this.nickname = requestDto.getNickname();
-    }
-
-    public void updateUserPassword(UpdateUserPasswordRequestDto requestDto) {
-        this.password = requestDto.getNewPassword();
+        this.password = requestDto.getPassword();
     }
 
 }

@@ -1,13 +1,15 @@
 package com.scoup.server.dto.menu;
 
 import com.scoup.server.domain.Menu;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Getter
 public class MenuResponseDto {
-    private List<Menu> menuList=new ArrayList<>();
+    @Builder.Default
+    private List<String> menu=new ArrayList<>();
 }
