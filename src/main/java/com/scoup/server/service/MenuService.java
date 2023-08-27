@@ -33,17 +33,12 @@ public class MenuService {
 		UserOrder userOrder=userOrderRepository.findById(orderId)
 				.orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
-		List<Menu> orderMenus=new ArrayList<>();
+		List<String> orderMenus=new ArrayList<>();
 
 		for(int i=0; i<menuList.size(); i++){
 			if(menuList.get(i).getUserOrderList().contains(userOrder)){
-				Menu tmp=Menu.builder()
-					.id(menuList.get(0).getId())
-					.price(menuList.get(0).getPrice())
-					.name(menuList.get(0).getName())
-					.cafe(menuList.get(0).getCafe())
-					.build();
-				orderMenus.add(tmp);
+				orderMenus.add(menuList.get(i).getName());
+
 			}
 		}
 
@@ -52,7 +47,7 @@ public class MenuService {
 		}
 
 		return MenuResponseDto.builder()
-				.menuList(orderMenus)
+				.menu(orderMenus)
 				.build();
 	}
 

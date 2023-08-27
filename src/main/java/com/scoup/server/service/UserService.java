@@ -2,6 +2,8 @@ package com.scoup.server.service;
 
 import com.scoup.server.common.response.ErrorMessage;
 import com.scoup.server.controller.exception.NotFoundException;
+import com.scoup.server.domain.*;
+import com.scoup.server.dto.mainPage.MainPageCafeResponseDto;
 import com.scoup.server.domain.Cafe;
 import com.scoup.server.domain.User;
 import com.scoup.server.domain.UserOrder;
@@ -9,6 +11,7 @@ import com.scoup.server.dto.mainPage.MainPageResponseDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
 import com.scoup.server.dto.user.UserDateResponseDto;
 import com.scoup.server.repository.CafeRepository;
+import com.scoup.server.repository.MenuRepository;
 import com.scoup.server.repository.UserOrderRepository;
 import com.scoup.server.repository.UserRepository;
 import lombok.Builder;
@@ -30,6 +33,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserOrderRepository userOrderRepository;
     private final CafeRepository cafeRepository;
+    private final MenuRepository menuRepository;
 
     public UserDateResponseDto getUser(Long userId) {
 
@@ -58,21 +62,33 @@ public class UserService {
         user.updateUser(requestDto);
     }
 
-    public MainPageResponseDto findCafe(Long id){
+    public List<MainPageCafeResponseDto> findCafe(Long id){
         User user= userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
         List<Long> cafeIdList=user.getCafeIdList();
-        List<Cafe> cafeList=new ArrayList<>();
+        List<UserOrder> userOrderList=userOrderRepository.findByUser_Id(id);
+
+        List<MainPageCafeResponseDto> cafeList=new ArrayList<>();
 
         for(int i=0; i<cafeIdList.size(); i++) {
             Cafe c = cafeRepository.findById(cafeIdList.get(i))
                     .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
-            cafeList.add(c);
+
+            int stamp=(int)(userOrderList.stream().filter(a->a.getMenu().getCafe().equals(c)).count());
+            List<String> tmpMenuList=new ArrayList<>();
+            menuRepository.findByCafe_Id(cafeIdList.get(i)).stream().forEach(a->tmpMenuList.add(a.getName()));
+
+            MainPageCafeResponseDto tmp=MainPageCafeResponseDto.builder()
+                    .id(c.getId())
+                    .name(c.getName())
+                    .menu(tmpMenuList)
+                    .stamp(stamp)
+                    .build();
+
+            cafeList.add(tmp);
         }
 
-        return MainPageResponseDto.builder()
-                .cafe(cafeList)
-                .build();
+        return cafeList;
     }
 
 }

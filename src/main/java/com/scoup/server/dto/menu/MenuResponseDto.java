@@ -11,5 +11,5 @@ import java.util.List;
 @Getter
 public class MenuResponseDto {
     @Builder.Default
-    private List<Menu> menuList=new ArrayList<>();
+    private List<String> menu=new ArrayList<>();
 }

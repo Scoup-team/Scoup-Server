@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface UserOrderRepository extends JpaRepository<UserOrder, Long> {
 
-    @Query("select u from UserOrder u where u.user.id=:userId")
-    List<UserOrder> findByUserId(@Param("userId") Long id);
+    List<UserOrder> findByUser_Id(Long id);
 
 }

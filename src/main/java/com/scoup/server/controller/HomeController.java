@@ -3,6 +3,7 @@ package com.scoup.server.controller;
 import com.scoup.server.dto.cafe.SearchCafeRequestDto;
 import com.scoup.server.dto.coupon.CouponResponseDto;
 import com.scoup.server.dto.Event.EventResponseDto;
+import com.scoup.server.dto.mainPage.MainPageCafeResponseDto;
 import com.scoup.server.dto.mainPage.MainPageResponseDto;
 import com.scoup.server.dto.mainPage.UpdateMainPageRequestDto;
 import com.scoup.server.dto.menu.MenuResponseDto;
@@ -33,10 +34,10 @@ public class HomeController {
 
 
     @GetMapping("/home")
-    public ApiResponse<MainPageResponseDto> mainPageCheck(
+    public ApiResponse<List<MainPageCafeResponseDto>> mainPageCheck(
             @RequestHeader Long userId
     ) {
-        MainPageResponseDto responseDto=userService.findCafe(userId);
+        List<MainPageCafeResponseDto> responseDto=userService.findCafe(userId);
 
         return ApiResponse.success(SuccessMessage.HOME_CHECK_SUCCESS, responseDto);
     }
