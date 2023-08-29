@@ -1,21 +1,16 @@
 package com.scoup.server.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.scoup.server.dto.mainPage.UpdateMainPageRequestDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,11 +32,8 @@ public class Cafe {
     @Column(nullable = false)
     private String imageUrl;
 
-    @Column
-    private String branch;
-
-    @OneToMany(mappedBy="cafe", cascade = CascadeType.ALL)
-    private List<Event> eventList = new ArrayList<>();
-
+    @JsonIgnoreProperties({"cafe"})
+    @OneToMany(mappedBy="cafe", cascade = CascadeType.REMOVE)
+    private List<Event> eventList;
 
 }

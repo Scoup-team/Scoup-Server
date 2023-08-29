@@ -1,5 +1,7 @@
 package com.scoup.server.dto.cafe;
 
+import com.scoup.server.domain.Cafe;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter

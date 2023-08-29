@@ -20,7 +20,6 @@ public class SearchCafeResponseDto {
             .shopName(cafe.getName())
             .shopAddress(cafe.getLocation())
             .shopImageUrl(cafe.getImageUrl())
-            .shopBranch(cafe.getBranch())
             .build();
     }
 }

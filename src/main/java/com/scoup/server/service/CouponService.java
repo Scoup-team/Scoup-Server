@@ -4,11 +4,12 @@ import com.scoup.server.common.response.ErrorMessage;
 import com.scoup.server.controller.exception.NotFoundException;
 import com.scoup.server.domain.Coupon;
 import com.scoup.server.dto.coupon.CouponResponseDto;
-import com.scoup.server.dto.coupon.UpdateCouponRequestDto;
 import com.scoup.server.repository.CouponRepository;
-import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,20 +21,30 @@ public class CouponService {
         this.couponRepository = couponRepository;
     }
 
-    public CouponResponseDto getCoupon(Long userId){
+    public List<CouponResponseDto> getCoupon(Long userId){
 
         List<Coupon> couponList = couponRepository.findByUser_Id(userId);
+        List<CouponResponseDto> dtoList=new ArrayList<>();
 
-        return CouponResponseDto.builder()
-                .couponList(couponList)
-                .build();
+        for(int i=0; i<couponList.size(); i++){
+            CouponResponseDto tmp=CouponResponseDto.builder()
+                    .id(couponList.get(i).getId())
+                    .period(couponList.get(i).getPeriod())
+                    .used(couponList.get(i).getUsed())
+                    .createdAt(couponList.get(i).getCreatedAt())
+                    .shopName(couponList.get(i).getCafe().getName())
+                    .build();
+            dtoList.add(tmp);
+        }
+
+        return dtoList;
     }
 
     @Transactional
-    public void patchCoupon(Long couponId, UpdateCouponRequestDto requestDto) {
+    public void patchCoupon(Long couponId) {
         Coupon coupon=couponRepository.findById(couponId)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_COUPON_EXCEPTION));
 
-        coupon.updateCoupon(requestDto);
+        coupon.updateCoupon();
     }
 }

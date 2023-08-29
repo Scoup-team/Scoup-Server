@@ -1,14 +1,20 @@
 package com.scoup.server.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.scoup.server.common.response.ErrorMessage;
 import com.scoup.server.controller.exception.NotFoundException;
+import com.scoup.server.domain.Cafe;
 import com.scoup.server.domain.Menu;
 import com.scoup.server.domain.UserOrder;
 import com.scoup.server.dto.menu.MenuResponseDto;
 import com.scoup.server.repository.MenuRepository;
 import com.scoup.server.repository.UserOrderRepository;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,18 +33,12 @@ public class MenuService {
 		UserOrder userOrder=userOrderRepository.findById(orderId)
 				.orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
-		List<Menu> orderMenus=new ArrayList<>();
+		List<String> orderMenus=new ArrayList<>();
 
 		for(int i=0; i<menuList.size(); i++){
 			if(menuList.get(i).getUserOrderList().contains(userOrder)){
-				Menu tmp=Menu.builder()
-					.id(menuList.get(0).getId())
-					.price(menuList.get(0).getPrice())
-					.userOrderList(menuList.get(0).getUserOrderList())
-					.name(menuList.get(0).getName())
-					.cafe(menuList.get(0).getCafe())
-					.build();
-				orderMenus.add(tmp);
+				orderMenus.add(menuList.get(i).getName());
+
 			}
 		}
 
@@ -47,7 +47,7 @@ public class MenuService {
 		}
 
 		return MenuResponseDto.builder()
-				.menuList(orderMenus)
+				.menu(orderMenus)
 				.build();
 	}
 

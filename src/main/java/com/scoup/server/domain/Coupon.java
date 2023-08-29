@@ -1,6 +1,5 @@
 package com.scoup.server.domain;
 
-import com.scoup.server.dto.coupon.UpdateCouponRequestDto;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,13 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.ManyToAny;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
@@ -40,16 +39,15 @@ public class Coupon {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userId")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="cafeId")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="cafe_id")
     private Cafe cafe;
 
-    public void updateCoupon(UpdateCouponRequestDto requestDto) {
-        this.used=requestDto.getUsed();
+    public void updateCoupon() {
+        this.used=false;
     }
-
 }

@@ -5,15 +5,18 @@ import com.scoup.server.controller.exception.NotFoundException;
 import com.scoup.server.domain.Cafe;
 import com.scoup.server.domain.Event;
 import com.scoup.server.domain.User;
-import com.scoup.server.dto.Event.EventResponseDto;
 import com.scoup.server.dto.cafe.SearchCafeRequestDto;
 import com.scoup.server.dto.cafe.SearchCafeResponseDto;
+import com.scoup.server.dto.Event.EventResponseDto;
 import com.scoup.server.dto.mainPage.UpdateMainPageRequestDto;
 import com.scoup.server.repository.CafeRepository;
+import com.scoup.server.repository.EventRepository;
 import com.scoup.server.repository.UserRepository;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,11 +25,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Builder
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class CafeService {
 
     private final UserRepository userRepository;
     private final CafeRepository cafeRepository;
+    private final EventRepository eventRepository;
 
     public List<SearchCafeResponseDto> searchCafe(Long userId, String keyword) {
         User user = userRepository.findById(userId)
@@ -35,52 +39,60 @@ public class CafeService {
         List<Cafe> cafeList = cafeRepository.findAllCafeContainingKeyword(keyword);
         return cafeList.stream()
             .map(SearchCafeResponseDto::of)
-            .collect(Collectors.toList());
+            .toList();
     }
 
-    public void addCafe(Long userId, SearchCafeRequestDto requestDto) {
+    public void addCafe(Long userId, Long shopId) {
         User user=userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
-        user.getCafeIdList().add(requestDto.getShopId());
+        user.getCafeIdList().add(shopId);
     }
 
     @Transactional
     public void deleteCafe(Long cafeId) {
         Cafe cafe=cafeRepository.findById(cafeId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
         cafeRepository.deleteById(cafe.getId());
     }
 
-    public EventResponseDto getEvent(Long cafeId){
+    public List<EventResponseDto> getEvent(Long cafeId){
         Cafe cafe=this.cafeRepository.findById(cafeId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
         List<Event> eventList=cafe.getEventList();
+        List<EventResponseDto> dtoList=new ArrayList<>();
 
-        return EventResponseDto.builder()
-            .eventList(eventList)
-            .build();
+        for(int i=0; i<eventList.size(); i++){
+            EventResponseDto tmp=EventResponseDto.builder()
+                    .id(eventList.get(i).getId())
+                    .content(eventList.get(i).getContent())
+                    .createdAt(eventList.get(i).getCreatedAt())
+                    .build();
+            dtoList.add(tmp);
+        }
+
+        return dtoList;
     }
 
     public void addEvent(Long eventId, Long cafeId, String content){
         Cafe cafe=this.cafeRepository.findById(cafeId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
         Event event=Event.builder()
-            .createdAt(LocalDateTime.now())
-            .content(content)
-            .build();
+                .createdAt(LocalDateTime.now())
+                .content(content)
+                .cafe(cafe)
+                .build();
 
-
+        eventRepository.save(event);
         cafe.getEventList().add(event);
-        //cafeRepository.save(cafe);
     }
 
     public void patchCafe(Long userId, UpdateMainPageRequestDto dto){
         User user=userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         Long cafeId=dto.getCafe().getId();
 
