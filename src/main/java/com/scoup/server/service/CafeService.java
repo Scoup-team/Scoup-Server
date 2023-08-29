@@ -33,7 +33,6 @@ public class CafeService {
             .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         List<Cafe> cafeList = cafeRepository.findAllCafeContainingKeyword(keyword);
-
         return cafeList.stream()
             .map(SearchCafeResponseDto::of)
             .collect(Collectors.toList());
