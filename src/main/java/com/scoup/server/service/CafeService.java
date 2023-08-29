@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class CafeService {
         List<Cafe> cafeList = cafeRepository.findAllCafeContainingKeyword(keyword);
         return cafeList.stream()
             .map(SearchCafeResponseDto::of)
-            .toList();
+            .collect(Collectors.toList());
     }
 
     public void addCafe(Long userId, Long shopId) {
