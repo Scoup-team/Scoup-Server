@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @Getter
 public class CouponResponseDto {
-    private Long id;
+    private Long couponId;
     private Integer period;
     private Boolean used;
     private LocalDateTime createdAt;

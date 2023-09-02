@@ -48,6 +48,6 @@ public class Coupon {
     private Cafe cafe;
 
     public void updateCoupon() {
-        this.used=false;
+        this.used=true;
     }
 }

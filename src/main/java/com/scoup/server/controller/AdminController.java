@@ -19,22 +19,20 @@ public class AdminController {
 
     private final CafeService cafeService;
     private final EventService eventService;
-    @PostMapping("/mypage/event/{eventId}")
+    @PostMapping("/mypage/event")
     public ApiResponse addEvent(
-            @PathVariable Long eventId,
             @RequestHeader Long cafeId,
             @RequestBody String content
     ) {
 
-        cafeService.addEvent(eventId, cafeId, content);
+        cafeService.addEvent(cafeId, content);
 
         return ApiResponse.success(SuccessMessage.HOME_CHECK_SUCCESS);
 
     }
 
-    @GetMapping("/mypage/event/{eventId}")
+    @GetMapping("/mypage/event")
     public ApiResponse<List<EventResponseDto>> getEvent(
-            @PathVariable Long eventId,
             @RequestHeader Long cafeId
     ){
 

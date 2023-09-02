@@ -26,6 +26,8 @@ public class Menu {
 
     private Integer price;
 
+    private String imageUrl;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="cafe_id")
     private Cafe cafe;
