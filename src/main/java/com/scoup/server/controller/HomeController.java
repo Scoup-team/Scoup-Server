@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("")
+//@RequestMapping("")
 public class HomeController {
 
     private final CafeService cafeService;
@@ -34,7 +34,7 @@ public class HomeController {
 
 
     @GetMapping("/home")
-    public ApiResponse<List<MainPageCafeResponseDto>> mainPageCheck(
+    public ApiResponse<List<MainPageCafeResponseDto>> getMainPage(
             @RequestHeader Long userId
     ) {
         List<MainPageCafeResponseDto> responseDto=userService.findCafe(userId);
@@ -47,11 +47,11 @@ public class HomeController {
     @PatchMapping("/home")
     public ApiResponse patchMainPage(
             @RequestHeader Long userId,
-            @RequestBody UpdateMainPageRequestDto updateMainPageRequestDto
+            @RequestHeader Long cafeId
     ) {
-        cafeService.patchCafe(userId, updateMainPageRequestDto);
+        cafeService.patchCafe(userId, cafeId);
 
-        return ApiResponse.success(SuccessMessage.HOME_CHECK_SUCCESS);
+        return ApiResponse.success(SuccessMessage.HOME_PATCH_SUCCESS);
     }
 
 
@@ -69,7 +69,7 @@ public class HomeController {
 
 
     @GetMapping("/home/{shopId}/{stampId}")
-    public ApiResponse<MenuResponseDto> menuCheck(
+    public ApiResponse<MenuResponseDto> getMenu(
             @PathVariable("shopId") Long shopId,
             @PathVariable("stampId") Long orderId
     ) {
@@ -80,17 +80,17 @@ public class HomeController {
     }
 
     @GetMapping("/home/{shopId}/event")
-    public ApiResponse<List<EventResponseDto>> eventCheck(
+    public ApiResponse<List<EventResponseDto>> getEvent(
             @PathVariable("shopId") Long shopId
     ) {
         List<EventResponseDto> eventList=cafeService.getEvent(shopId);
 
-        return ApiResponse.success(SuccessMessage.SEARCH_CAFE_SUCCESS, eventList);
+        return ApiResponse.success(SuccessMessage.EVENT_CHECK_SUCCESS, eventList);
 
     }
 
     @GetMapping("/mypage/coupon")
-    public ApiResponse<List<CouponResponseDto>> couponCheck(
+    public ApiResponse<List<CouponResponseDto>>  getCoupon(
             @RequestHeader Long userId
     ) {
         List<CouponResponseDto> couponList=couponService.getCoupon(userId);
@@ -99,7 +99,7 @@ public class HomeController {
     }
 
     @PostMapping("/mypage/coupon/{couponId}")
-    public ApiResponse couponUse(
+    public ApiResponse useCoupon(
             @PathVariable("couponId") Long couponId
     ) {
         couponService.patchCoupon(couponId);

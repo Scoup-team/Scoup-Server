@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +36,7 @@ public class CafeService {
             .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         List<Cafe> cafeList = cafeRepository.findAllCafeContainingKeyword(keyword);
+
         return cafeList.stream()
             .map(SearchCafeResponseDto::of)
             .collect(Collectors.toList());
@@ -64,9 +64,10 @@ public class CafeService {
         List<Event> eventList=cafe.getEventList();
         List<EventResponseDto> dtoList=new ArrayList<>();
 
+
         for(int i=0; i<eventList.size(); i++){
             EventResponseDto tmp=EventResponseDto.builder()
-                    .id(eventList.get(i).getId())
+                    .eventId(eventList.get(i).getId())
                     .content(eventList.get(i).getContent())
                     .createdAt(eventList.get(i).getCreatedAt())
                     .build();
@@ -76,7 +77,7 @@ public class CafeService {
         return dtoList;
     }
 
-    public void addEvent(Long eventId, Long cafeId, String content){
+    public void addEvent(Long cafeId, String content){
         Cafe cafe=this.cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
@@ -90,11 +91,9 @@ public class CafeService {
         cafe.getEventList().add(event);
     }
 
-    public void patchCafe(Long userId, UpdateMainPageRequestDto dto){
+    public void patchCafe(Long userId, Long cafeId){
         User user=userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
-
-        Long cafeId=dto.getCafe().getId();
 
         //카페 아이디 리스트 뽑아와서 있으면 삭제 없으면 추가
         if(user.getCafeIdList().contains(cafeId)){
