@@ -1,5 +1,6 @@
 package com.scoup.server.domain;
 
+import com.scoup.server.dto.user.UpdateUserPasswordRequestDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
 
 import javax.persistence.*;
@@ -46,7 +47,10 @@ public class User {
 
     public void updateUser(UpdateUserRequestDto requestDto) {
         this.nickname = requestDto.getNickname();
-        this.password = requestDto.getPassword();
+    }
+
+    public void updateUserPassword(UpdateUserPasswordRequestDto requestDto) {
+        this.password = requestDto.getNewPassword();
     }
 
 }
