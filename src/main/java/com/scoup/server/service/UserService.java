@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Builder
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class giUserService {
+public class UserService {
 
     private final UserRepository userRepository;
     private final UserOrderRepository userOrderRepository;
