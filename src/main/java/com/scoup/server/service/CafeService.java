@@ -40,7 +40,7 @@ public class CafeService {
 
         return cafeList.stream()
             .map(SearchCafeResponseDto::of)
-            .toList();
+            .collect(Collectors.toList());
     }
 
     public void addCafe(Long userId, Long shopId) {
