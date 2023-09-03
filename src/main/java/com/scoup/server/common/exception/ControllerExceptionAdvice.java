@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.scoup.server.common.response.ApiResponse;
 import com.scoup.server.controller.exception.BadRequestException;
+import com.scoup.server.controller.exception.NotFoundDataException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,12 +24,6 @@ public class ControllerExceptionAdvice {
         return ResponseEntity.status(BAD_REQUEST).body(ApiResponse.error(exception.getError(), exception.getMessage()));
     }
 
-    @ExceptionHandler({
-            NotFoundException.class
-    })
-    public ResponseEntity<ApiResponse> NotFoundException(BaseException exception) {
-        return ResponseEntity.status(NOT_FOUND).body(ApiResponse.error(exception.getError(), exception.getMessage()));
-    }
 
     /**
      * 401 UNAUTHORIZED
@@ -39,6 +34,12 @@ public class ControllerExceptionAdvice {
     /**
      * 404 NOT FOUND
      */
+    @ExceptionHandler({
+        NotFoundDataException.class
+    })
+    public ResponseEntity<ApiResponse> NotFoundException(BaseException exception) {
+        return ResponseEntity.status(NOT_FOUND).body(ApiResponse.error(exception.getError(), exception.getMessage()));
+    }
 
 
 

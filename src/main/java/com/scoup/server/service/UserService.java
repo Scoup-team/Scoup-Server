@@ -1,13 +1,12 @@
 package com.scoup.server.service;
 
 import com.scoup.server.common.response.ErrorMessage;
-import com.scoup.server.controller.exception.NotFoundException;
-import com.scoup.server.domain.*;
+import com.scoup.server.controller.exception.NotFoundDataException;
 import com.scoup.server.dto.mainPage.MainPageCafeResponseDto;
 import com.scoup.server.domain.Cafe;
 import com.scoup.server.domain.User;
 import com.scoup.server.domain.UserOrder;
-import com.scoup.server.dto.mainPage.MainPageResponseDto;
+import com.scoup.server.dto.user.UpdateUserPasswordRequestDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
 import com.scoup.server.dto.user.UserDateResponseDto;
 import com.scoup.server.repository.CafeRepository;
@@ -21,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Builder
@@ -38,7 +35,7 @@ public class UserService {
     public UserDateResponseDto getUser(Long userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         return UserDateResponseDto.builder()
             .id(user.getId())
@@ -49,7 +46,7 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         userRepository.deleteById(user.getId());
     }
@@ -57,14 +54,24 @@ public class UserService {
     @Transactional
     public void patchUser(Long userId, UpdateUserRequestDto requestDto) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         user.updateUser(requestDto);
     }
 
+    @Transactional
+    public void patchUserPassword(Long userId, UpdateUserPasswordRequestDto requestDto) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+        userRepository.findFirstByPassword(requestDto.getOriginPassword())
+            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_PASSWORD_EXCEPTION));
+
+        user.updateUserPassword(requestDto);
+    }
+
     public List<MainPageCafeResponseDto> findCafe(Long id){
         User user= userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
         List<Long> cafeIdList=user.getCafeIdList();
         List<UserOrder> userOrderList=userOrderRepository.findByUser_Id(id);
 
@@ -72,7 +79,7 @@ public class UserService {
 
         for(int i=0; i<cafeIdList.size(); i++) {
             Cafe c = cafeRepository.findById(cafeIdList.get(i))
-                    .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+                    .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
             int stamp=(int)(userOrderList.stream().filter(a->a.getMenu().getCafe().equals(c)).count());
             List<String> tmpMenuList=new ArrayList<>();

@@ -1,7 +1,7 @@
 package com.scoup.server.service;
 
 import com.scoup.server.common.response.ErrorMessage;
-import com.scoup.server.controller.exception.NotFoundException;
+import com.scoup.server.controller.exception.NotFoundDataException;
 import com.scoup.server.domain.Coupon;
 import com.scoup.server.dto.coupon.CouponResponseDto;
 import com.scoup.server.repository.CouponRepository;
@@ -43,7 +43,7 @@ public class CouponService {
     @Transactional
     public void patchCoupon(Long couponId) {
         Coupon coupon=couponRepository.findById(couponId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_COUPON_EXCEPTION));
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_COUPON_EXCEPTION));
 
         coupon.updateCoupon();
     }

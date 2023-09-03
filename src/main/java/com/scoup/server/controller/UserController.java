@@ -2,6 +2,7 @@ package com.scoup.server.controller;
 
 import com.scoup.server.common.response.ApiResponse;
 import com.scoup.server.common.response.SuccessMessage;
+import com.scoup.server.dto.user.UpdateUserPasswordRequestDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
 import com.scoup.server.dto.user.UserDateResponseDto;
 import com.scoup.server.service.UserService;
@@ -37,7 +38,7 @@ public class UserController {
         return ApiResponse.success(SuccessMessage.DELETE_USER_SUCCESS);
     }
 
-    @PatchMapping
+    @PatchMapping("/nickname")
     public ApiResponse patchUser(
         @RequestHeader Long userId,
         @RequestBody UpdateUserRequestDto requestDto
@@ -46,5 +47,12 @@ public class UserController {
         return ApiResponse.success(SuccessMessage.PATCH_USER_SUCCESS);
     }
 
-
+    @PatchMapping("/password")
+    public ApiResponse patchUserPassword(
+        @RequestHeader Long userId,
+        @RequestBody UpdateUserPasswordRequestDto requestDto
+    ) {
+        userService.patchUserPassword(userId, requestDto);
+        return ApiResponse.success(SuccessMessage.PATCH_USER_SUCCESS);
+    }
 }

@@ -1,11 +1,10 @@
 package com.scoup.server.service;
 
 import com.scoup.server.common.response.ErrorMessage;
-import com.scoup.server.controller.exception.NotFoundException;
+import com.scoup.server.controller.exception.NotFoundDataException;
 import com.scoup.server.domain.Cafe;
 import com.scoup.server.domain.Event;
 import com.scoup.server.domain.User;
-import com.scoup.server.dto.cafe.SearchCafeRequestDto;
 import com.scoup.server.dto.cafe.SearchCafeResponseDto;
 import com.scoup.server.dto.Event.EventResponseDto;
 import com.scoup.server.dto.mainPage.UpdateMainPageRequestDto;
@@ -35,7 +34,7 @@ public class CafeService {
 
     public List<SearchCafeResponseDto> searchCafe(Long userId, String keyword) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         List<Cafe> cafeList = cafeRepository.findAllCafeContainingKeyword(keyword);
         return cafeList.stream()
@@ -45,7 +44,7 @@ public class CafeService {
 
     public void addCafe(Long userId, Long shopId) {
         User user=userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         user.getCafeIdList().add(shopId);
     }
@@ -53,14 +52,14 @@ public class CafeService {
     @Transactional
     public void deleteCafe(Long cafeId) {
         Cafe cafe=cafeRepository.findById(cafeId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
         cafeRepository.deleteById(cafe.getId());
     }
 
     public List<EventResponseDto> getEvent(Long cafeId){
         Cafe cafe=this.cafeRepository.findById(cafeId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
         List<Event> eventList=cafe.getEventList();
         List<EventResponseDto> dtoList=new ArrayList<>();
@@ -79,7 +78,7 @@ public class CafeService {
 
     public void addEvent(Long eventId, Long cafeId, String content){
         Cafe cafe=this.cafeRepository.findById(cafeId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
         Event event=Event.builder()
                 .createdAt(LocalDateTime.now())
@@ -93,7 +92,7 @@ public class CafeService {
 
     public void patchCafe(Long userId, UpdateMainPageRequestDto dto){
         User user=userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         Long cafeId=dto.getCafe().getId();
 
