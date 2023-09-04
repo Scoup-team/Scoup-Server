@@ -18,6 +18,7 @@ public class CouponResponseDto {
     private Long couponId;
     private Integer period;
     private Boolean used;
+    private String content;
     private LocalDateTime createdAt;
     private String shopName;
 }
