@@ -31,6 +31,7 @@ public class CouponService {
                     .couponId(couponList.get(i).getId())
                     .period(couponList.get(i).getPeriod())
                     .used(couponList.get(i).getUsed())
+                    .content(couponList.get(i).getContent())
                     .createdAt(couponList.get(i).getCreatedAt())
                     .shopName(couponList.get(i).getCafe().getName())
                     .build();

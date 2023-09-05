@@ -36,6 +36,9 @@ public class Coupon {
     @Column(nullable = false)
     private Boolean used;
 
+    @Column(nullable = false)
+    private String content;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
