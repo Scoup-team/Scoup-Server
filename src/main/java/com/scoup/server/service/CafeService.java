@@ -47,7 +47,11 @@ public class CafeService {
         User user=userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
-        user.getCafeIdList().add(shopId);
+        if(user.getCafeIdList().contains(shopId)){
+            throw new NotFoundException(ErrorMessage.REDUPLICATION_CAFE_EXCEPTION);
+        }else{
+            user.getCafeIdList().add(shopId);
+        }
     }
 
     @Transactional

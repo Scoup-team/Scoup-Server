@@ -45,6 +45,10 @@ public class CouponService {
         Coupon coupon=couponRepository.findById(couponId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_COUPON_EXCEPTION));
 
-        coupon.updateCoupon();
+        if(coupon.getUsed()==true){
+            throw new NotFoundException(ErrorMessage.USED_COUPON_EXCEPTION);
+        }else{
+            coupon.updateCoupon();
+        }
     }
 }
