@@ -7,6 +7,7 @@ import com.scoup.server.dto.Event.EventResponseDto;
 import com.scoup.server.service.CafeService;
 
 import com.scoup.server.service.EventService;
+import com.scoup.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ public class AdminController {
 
     private final CafeService cafeService;
     private final EventService eventService;
+    private final UserService userService;
     @PostMapping("/mypage/event")
     public ApiResponse addEvent(
             @RequestHeader Long cafeId,
@@ -48,7 +50,7 @@ public class AdminController {
             ){
         eventService.patchEvent(eventId, requestDto);
 
-        return ApiResponse.success(SuccessMessage.EVENT_CHECK_SUCCESS);
+        return ApiResponse.success(SuccessMessage.EVENT_PATCH_SUCCESS);
     }
 
     @DeleteMapping("/mypage/event/{eventId}")
@@ -57,6 +59,15 @@ public class AdminController {
     ){
         eventService.deleteEvent(eventId);
 
-        return ApiResponse.success(SuccessMessage.EVENT_CHECK_SUCCESS);
+        return ApiResponse.success(SuccessMessage.EVENT_DELETE_SUCCESS);
+    }
+
+    @GetMapping("/mypage/shop")
+    public ApiResponse<List<AdminCafeReponseDto>> getAdminShop(
+            @RequestHeader Long adminUserId
+    ){
+        List<AdminCafeReponseDto> cafeList=userService.getAdminCafe(adminUserId);
+
+        return ApiResponse.success(SuccessMessage.ADMIN_CHECK_SUCCESS, cafeList);
     }
 }

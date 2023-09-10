@@ -6,6 +6,7 @@ import com.scoup.server.domain.Cafe;
 import com.scoup.server.domain.Menu;
 import com.scoup.server.domain.User;
 import com.scoup.server.domain.UserOrder;
+import com.scoup.server.dto.cafe.AdminCafeReponseDto;
 import com.scoup.server.dto.mainPage.MainPageCafeResponseDto;
 import com.scoup.server.dto.user.UpdateUserPasswordRequestDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
@@ -124,4 +125,31 @@ public class UserService {
         return cafeList;
     }
 
+    public List<AdminCafeReponseDto> getAdminCafe(Long adminUserId){
+        User adminUser=userRepository.findById(adminUserId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
+        if(!adminUser.getMaster()){
+            throw new NotFoundException(ErrorMessage.NOT_ADMIN_EXCEPTION);
+        }
+
+        List<Long> cafeIdList=adminUser.getCafeIdList();
+        List<AdminCafeReponseDto> cafeList=new ArrayList<>();
+
+        for(int i=0; i<cafeIdList.size(); i++){
+            Cafe c=cafeRepository.findById(cafeIdList.get(i))
+                    .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+
+            AdminCafeReponseDto tmp=AdminCafeReponseDto.builder()
+                    .shopId(c.getId())
+                    .shopName(c.getName())
+                    //.shopBranch(c)
+                    .shopAddress(c.getLocation())
+                    .shopImageUrl(c.getImageUrl())
+                    .build();
+            cafeList.add(tmp);
+        }
+
+        return cafeList;
+    }
 }
