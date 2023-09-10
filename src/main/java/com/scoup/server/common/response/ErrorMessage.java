@@ -29,11 +29,13 @@ public enum ErrorMessage {
      */
     NOT_FOUND_CAFE_EXCEPTION(NOT_FOUND, "카페를 찾을 수 없습니다."),
     NOT_FOUND_MENU_EXCEPTION(NOT_FOUND, "메뉴를 찾을 수 없습니다."),
+    REDUPLICATION_CAFE_EXCEPTION(NOT_FOUND, "같은 가게를 추가할 수 없습니다."),
 
     /**
      * coupon
      */
     NOT_FOUND_COUPON_EXCEPTION(NOT_FOUND, "쿠폰을 찾을 수 없습니다."),
+    USED_COUPON_EXCEPTION(NOT_FOUND, "사용한 쿠폰입니다."),
 
     /**
      * event
