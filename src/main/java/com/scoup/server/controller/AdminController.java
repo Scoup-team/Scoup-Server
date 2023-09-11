@@ -2,8 +2,10 @@ package com.scoup.server.controller;
 
 import com.scoup.server.common.response.ApiResponse;
 import com.scoup.server.common.response.SuccessMessage;
+import com.scoup.server.config.resolver.UserId;
 import com.scoup.server.dto.Event.UpdateEventRequestDto;
 import com.scoup.server.dto.Event.EventResponseDto;
+import com.scoup.server.dto.cafe.AdminCafeReponseDto;
 import com.scoup.server.service.CafeService;
 
 import com.scoup.server.service.EventService;
@@ -64,9 +66,9 @@ public class AdminController {
 
     @GetMapping("/mypage/shop")
     public ApiResponse<List<AdminCafeReponseDto>> getAdminShop(
-            @RequestHeader Long adminUserId
+        @UserId Long userId
     ){
-        List<AdminCafeReponseDto> cafeList=userService.getAdminCafe(adminUserId);
+        List<AdminCafeReponseDto> cafeList=userService.getAdminCafe(userId);
 
         return ApiResponse.success(SuccessMessage.ADMIN_CHECK_SUCCESS, cafeList);
     }

@@ -127,10 +127,10 @@ public class UserService {
 
     public List<AdminCafeReponseDto> getAdminCafe(Long adminUserId){
         User adminUser=userRepository.findById(adminUserId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         if(!adminUser.getMaster()){
-            throw new NotFoundException(ErrorMessage.NOT_ADMIN_EXCEPTION);
+            throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
         }
 
         List<Long> cafeIdList=adminUser.getCafeIdList();
@@ -138,7 +138,7 @@ public class UserService {
 
         for(int i=0; i<cafeIdList.size(); i++){
             Cafe c=cafeRepository.findById(cafeIdList.get(i))
-                    .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+                    .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
             AdminCafeReponseDto tmp=AdminCafeReponseDto.builder()
                     .shopId(c.getId())

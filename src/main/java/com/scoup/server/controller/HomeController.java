@@ -2,6 +2,7 @@ package com.scoup.server.controller;
 
 import com.scoup.server.common.response.ApiResponse;
 import com.scoup.server.common.response.SuccessMessage;
+import com.scoup.server.config.resolver.UserId;
 import com.scoup.server.dto.Event.EventResponseDto;
 import com.scoup.server.dto.coupon.CouponResponseDto;
 import com.scoup.server.dto.mainPage.MainPageCafeResponseDto;
@@ -33,7 +34,7 @@ public class HomeController {
 
     @GetMapping("/home")
     public ApiResponse<List<MainPageCafeResponseDto>> getMainPage(
-        @RequestHeader Long userId
+        @UserId Long userId
     ) {
         List<MainPageCafeResponseDto> responseDto = userService.findCafe(userId);
 
@@ -43,7 +44,7 @@ public class HomeController {
 
     @PatchMapping("/home")
     public ApiResponse patchMainPage(
-        @RequestHeader Long userId,
+        @UserId Long userId,
         @RequestHeader Long cafeId
     ) {
         cafeService.patchCafe(userId, cafeId);
@@ -55,7 +56,7 @@ public class HomeController {
     @PostMapping("/shop/{shopId}")
     public ApiResponse mainPageAdd(
         @PathVariable("shopId") Long shopId,
-        @RequestHeader Long userId
+        @UserId Long userId
     ) {
 
         cafeService.addCafe(userId, shopId);
@@ -87,7 +88,7 @@ public class HomeController {
 
     @GetMapping("/mypage/coupon")
     public ApiResponse<List<CouponResponseDto>> getCoupon(
-        @RequestHeader Long userId
+        @UserId Long userId
     ) {
         List<CouponResponseDto> couponList = couponService.getCoupon(userId);
 
