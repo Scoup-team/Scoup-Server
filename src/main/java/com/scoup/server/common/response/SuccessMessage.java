@@ -24,6 +24,7 @@ public enum SuccessMessage {
     PATCH_USER_SUCCESS(OK, "유저 수정에 성공했습니다."),
     HOME_CHECK_SUCCESS(OK, "홈 조회 성공하였습니다."),
     HOME_PATCH_SUCCESS(OK, "홈 수정 성공하였습니다."),
+    ADMIN_CHECK_SUCCESS(OK, "카페 조회 성공하였습니다."),
 
     /**
      * cafe
@@ -46,6 +47,8 @@ public enum SuccessMessage {
      * event
      */
     EVENT_CHECK_SUCCESS(OK, "이벤트 조회 성공하였습니다."),
+    EVENT_PATCH_SUCCESS(OK, "이벤트 수정 성공하였습니다."),
+    EVENT_DELETE_SUCCESS(OK, "이벤트 삭제 성공하였습니다."),
     ;
 
     private final HttpStatus httpStatus;
