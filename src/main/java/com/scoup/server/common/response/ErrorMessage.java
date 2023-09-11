@@ -1,5 +1,6 @@
 package com.scoup.server.common.response;
 
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -22,6 +23,8 @@ public enum ErrorMessage {
     EXPIRED_TOKEN(UNAUTHORIZED, "만료된 토큰입니다."),
     NOT_FOUND_USER_EXCEPTION(NOT_FOUND, "유저를 찾을 수 없습니다."),
     NOT_FOUND_USER_PASSWORD_EXCEPTION(NOT_FOUND, "잘못된 비밀번호입니다."),
+    CONFLICT_USER_PASSWORD_EXCEPTION(CONFLICT, "존재하는 유저 비밀번호 입니다."),
+    CONFLICT_USER_NICKNAME_EXCEPTION(CONFLICT, "존재하는 유저 닉네임 입니다."),
 
 
     /**

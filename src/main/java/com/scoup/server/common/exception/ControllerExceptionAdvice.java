@@ -1,11 +1,13 @@
 package com.scoup.server.common.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.scoup.server.common.response.ApiResponse;
 import com.scoup.server.controller.exception.BadRequestException;
 import com.scoup.server.controller.exception.NotFoundDataException;
+import com.scoup.server.controller.exception.UserConflictException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,12 +37,21 @@ public class ControllerExceptionAdvice {
      * 404 NOT FOUND
      */
     @ExceptionHandler({
-        NotFoundDataException.class
+        NotFoundDataException.class,
     })
     public ResponseEntity<ApiResponse> NotFoundException(BaseException exception) {
         return ResponseEntity.status(NOT_FOUND).body(ApiResponse.error(exception.getError(), exception.getMessage()));
     }
 
+    /**
+     * 409 CONFLICT
+     */
+    @ExceptionHandler({
+        UserConflictException.class
+    })
+    public ResponseEntity<ApiResponse> ConflictException(BaseException exception) {
+        return ResponseEntity.status(CONFLICT).body(ApiResponse.error(exception.getError(), exception.getMessage()));
+    }
 
 
     /**

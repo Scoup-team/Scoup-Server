@@ -1,5 +1,6 @@
 package com.scoup.server.domain;
 
+import com.scoup.server.dto.auth.SignupRequestDTO;
 import com.scoup.server.dto.user.UpdateUserPasswordRequestDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
 
@@ -51,6 +52,16 @@ public class User {
 
     public void updateUserPassword(UpdateUserPasswordRequestDto requestDto) {
         this.password = requestDto.getNewPassword();
+    }
+
+    public static User of(SignupRequestDTO requestDTO) {
+        return User.builder()
+            .email(requestDTO.getEmail())
+            .name(requestDTO.getName())
+            .password(requestDTO.getPassword())
+            .master(false)
+            .nickname(requestDTO.getNickname())
+            .build();
     }
 
 }
