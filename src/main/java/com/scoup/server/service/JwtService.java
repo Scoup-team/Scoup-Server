@@ -27,8 +27,8 @@ public class JwtService {
 
     public static final String ACCESS_TOKEN = "accessToken";
     public static final String REFRESH_TOKEN = "refreshToken";
-    private static final Long ACCESS_TOKEN_VALID_TIME = ofHours(4).toMillis();
-    private static final Long REFRESH_TOKEN_VALID_TIME = ofDays(14).toMillis();
+    private static final Long ACCESS_TOKEN_VALID_TIME = ofDays(5).toMillis();
+    private static final Long REFRESH_TOKEN_VALID_TIME = ofDays(30).toMillis();
 
 
     @PostConstruct // 한번만 생성되도록 하는

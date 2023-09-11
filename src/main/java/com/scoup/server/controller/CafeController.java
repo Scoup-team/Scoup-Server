@@ -2,6 +2,7 @@ package com.scoup.server.controller;
 
 import com.scoup.server.common.response.ApiResponse;
 import com.scoup.server.common.response.SuccessMessage;
+import com.scoup.server.config.resolver.UserId;
 import com.scoup.server.dto.cafe.SearchCafeResponseDto;
 import com.scoup.server.service.CafeService;
 import java.util.List;
@@ -21,7 +22,7 @@ public class CafeController {
 
     @GetMapping
     public ApiResponse<List<SearchCafeResponseDto>> searchCafe(
-        @RequestHeader Long userId,
+        @UserId Long userId,
         @RequestParam String keyword
     ) {
         List<SearchCafeResponseDto> data = cafeService.searchCafe(userId, keyword);

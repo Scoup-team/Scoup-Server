@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +49,7 @@ public class CafeService {
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         if(user.getCafeIdList().contains(shopId)){
-            throw new NotFoundException(ErrorMessage.REDUPLICATION_CAFE_EXCEPTION);
+            throw new NotFoundDataException(ErrorMessage.REDUPLICATION_CAFE_EXCEPTION);
         }else{
             user.getCafeIdList().add(shopId);
         }

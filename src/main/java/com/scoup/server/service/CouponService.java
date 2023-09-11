@@ -46,7 +46,7 @@ public class CouponService {
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_COUPON_EXCEPTION));
 
         if(coupon.getUsed()==true){
-            throw new NotFoundException(ErrorMessage.USED_COUPON_EXCEPTION);
+            throw new NotFoundDataException(ErrorMessage.USED_COUPON_EXCEPTION);
         }else{
             coupon.updateCoupon();
         }

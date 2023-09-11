@@ -2,6 +2,7 @@ package com.scoup.server.controller;
 
 import com.scoup.server.common.response.ApiResponse;
 import com.scoup.server.common.response.SuccessMessage;
+import com.scoup.server.config.resolver.UserId;
 import com.scoup.server.dto.user.UpdateUserPasswordRequestDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
 import com.scoup.server.dto.user.UserDateResponseDto;
@@ -24,7 +25,7 @@ public class UserController {
 
     @GetMapping
     public ApiResponse<UserDateResponseDto> getUser(
-        @RequestHeader Long userId
+        @UserId Long userId
     ) {
         UserDateResponseDto data = userService.getUser(userId);
         return ApiResponse.success(SuccessMessage.GET_USER_DATA, data);
@@ -32,7 +33,7 @@ public class UserController {
 
     @DeleteMapping
     public ApiResponse deleteUser(
-        @RequestHeader Long userId
+        @UserId Long userId
     ) {
         userService.deleteUser(userId);
         return ApiResponse.success(SuccessMessage.DELETE_USER_SUCCESS);
@@ -40,7 +41,7 @@ public class UserController {
 
     @PatchMapping("/nickname")
     public ApiResponse patchUser(
-        @RequestHeader Long userId,
+        @UserId Long userId,
         @RequestBody UpdateUserRequestDto requestDto
     ) {
         userService.patchUser(userId, requestDto);
@@ -49,7 +50,7 @@ public class UserController {
 
     @PatchMapping("/password")
     public ApiResponse patchUserPassword(
-        @RequestHeader Long userId,
+        @UserId Long userId,
         @RequestBody UpdateUserPasswordRequestDto requestDto
     ) {
         userService.patchUserPassword(userId, requestDto);

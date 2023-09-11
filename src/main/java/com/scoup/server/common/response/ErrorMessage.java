@@ -7,6 +7,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.http.HttpStatus;
 
 @Getter
@@ -25,7 +26,7 @@ public enum ErrorMessage {
     NOT_FOUND_USER_PASSWORD_EXCEPTION(NOT_FOUND, "잘못된 비밀번호입니다."),
     CONFLICT_USER_PASSWORD_EXCEPTION(CONFLICT, "존재하는 유저 비밀번호 입니다."),
     CONFLICT_USER_NICKNAME_EXCEPTION(CONFLICT, "존재하는 유저 닉네임 입니다."),
-
+    NOT_ADMIN_EXCEPTION(NOT_FOUND, "어드민 유저가 아닙니다."),
 
     /**
      * cafe
