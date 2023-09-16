@@ -97,15 +97,15 @@ public class CafeService {
         cafe.getEventList().add(event);
     }
 
-    public void patchCafe(Long userId, Long cafeId){
+    public void deleteMainPageCafe(Long userId, Long cafeId){
         User user=userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
-        //카페 아이디 리스트 뽑아와서 있으면 삭제 없으면 추가
+        //카페 아이디 리스트 뽑아와서 있으면 삭제
         if(user.getCafeIdList().contains(cafeId)){
             user.getCafeIdList().remove(cafeId);
         }else{
-            user.getCafeIdList().add(cafeId);
+            throw new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION);
         }
 
         userRepository.save(user);
