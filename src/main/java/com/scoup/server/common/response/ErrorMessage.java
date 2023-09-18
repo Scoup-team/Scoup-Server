@@ -1,6 +1,7 @@
 package com.scoup.server.common.response;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -16,6 +17,9 @@ public enum ErrorMessage {
     /**
      * auth
      */
+    AUTHENTICATION_BEARER_EXCEPTION(UNAUTHORIZED,"Bearer로 시작하지 않는 토큰입니다."),
+    EXPIRED_ALL_TOKEN_EXCEPTION(FORBIDDEN, "토큰이 모두 만료되었습니다. 다시 로그인해주세요."),
+    VALID_ALL_TOKEN_EXCEPTION(FORBIDDEN, "토큰이 모두 유효합니다."),
 
 
     /**
