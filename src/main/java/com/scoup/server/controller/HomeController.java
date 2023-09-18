@@ -43,11 +43,11 @@ public class HomeController {
 
 
     @PatchMapping("/home")
-    public ApiResponse patchMainPage(
+    public ApiResponse deleteMainPage(
         @UserId Long userId,
         @RequestHeader Long cafeId
     ) {
-        cafeService.patchCafe(userId, cafeId);
+        cafeService.deleteMainPageCafe(userId, cafeId);
 
         return ApiResponse.success(SuccessMessage.HOME_PATCH_SUCCESS);
     }

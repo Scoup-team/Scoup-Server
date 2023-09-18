@@ -114,8 +114,9 @@ public class UserService {
             MainPageCafeResponseDto tmp = MainPageCafeResponseDto.builder()
                 .shopId(c.getId())
                 .name(c.getName())
+                .cafeImageUrl(c.getImageUrl())
                 .menu(menuNameList)
-                .imageUrl(menuImgList)
+                .menuImageUrl(menuImgList)
                 .stamp(stamp)
                 .build();
 
