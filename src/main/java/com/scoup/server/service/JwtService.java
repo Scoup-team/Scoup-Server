@@ -3,6 +3,7 @@ package com.scoup.server.service;
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 import static java.time.Duration.ofDays;
 import static java.time.Duration.ofHours;
+import static java.time.Duration.ofMinutes;
 
 import com.scoup.server.common.response.ErrorMessage;
 import com.scoup.server.controller.exception.UnauthorizedException;
@@ -24,10 +25,9 @@ import org.springframework.stereotype.Service;
 public class JwtService {
     @Value("${jwt.secret}")
     private String jwtSecret;
-
     public static final String ACCESS_TOKEN = "accessToken";
     public static final String REFRESH_TOKEN = "refreshToken";
-    private static final Long ACCESS_TOKEN_VALID_TIME = ofDays(5).toMillis();
+    private static final Long ACCESS_TOKEN_VALID_TIME = ofMinutes(3).toMillis();
     private static final Long REFRESH_TOKEN_VALID_TIME = ofDays(30).toMillis();
 
 
@@ -111,7 +111,7 @@ public class JwtService {
 
         String userId = parser.parseClaimsJws(token)
             .getBody()
-            .getId();
+            .get("userId").toString();
 
         return Long.valueOf(userId);
     }
