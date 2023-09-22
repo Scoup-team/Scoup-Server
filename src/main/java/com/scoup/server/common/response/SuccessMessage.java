@@ -51,6 +51,11 @@ public enum SuccessMessage {
     EVENT_CHECK_SUCCESS(OK, "이벤트 조회 성공하였습니다."),
     EVENT_PATCH_SUCCESS(OK, "이벤트 수정 성공하였습니다."),
     EVENT_DELETE_SUCCESS(OK, "이벤트 삭제 성공하였습니다."),
+
+    /**
+     * receipt
+     */
+    CREATE_RECEIPT_SUCCESS(OK, "영수증 저장에 성공했습니다."),
     ;
 
     private final HttpStatus httpStatus;
