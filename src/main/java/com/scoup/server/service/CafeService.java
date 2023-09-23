@@ -9,6 +9,7 @@ import com.scoup.server.domain.Stamp;
 import com.scoup.server.domain.User;
 import com.scoup.server.domain.UserOrder;
 import com.scoup.server.dto.Event.EventResponseDto;
+import com.scoup.server.dto.admin.PatchAdminCafeRequestDto;
 import com.scoup.server.dto.cafe.SearchCafeResponseDto;
 import com.scoup.server.dto.menu.ReceiptRequestDto;
 import com.scoup.server.dto.menu.ReceiptResponseDto;
@@ -64,7 +65,9 @@ public class CafeService {
     }
 
     @Transactional
-    public void deleteCafe(Long cafeId) {
+    public void deleteCafe(Long cafeId, Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
         Cafe cafe = cafeRepository.findById(cafeId)
             .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
@@ -164,5 +167,15 @@ public class CafeService {
             .menu(menu)
             .stamp(stamp)
             .build());
+    }
+
+    @Transactional
+    public void patchCafe(PatchAdminCafeRequestDto requestDto, Long shopId, Long userId){
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+        Cafe cafe = cafeRepository.findById(shopId)
+            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+
+        cafe.patchCafe(requestDto);
     }
 }

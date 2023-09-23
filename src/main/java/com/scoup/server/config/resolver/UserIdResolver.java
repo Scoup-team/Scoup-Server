@@ -1,5 +1,7 @@
 package com.scoup.server.config.resolver;
 
+import com.scoup.server.common.response.ErrorMessage;
+import com.scoup.server.controller.exception.UnauthorizedException;
 import com.scoup.server.service.JwtService;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,7 @@ public class UserIdResolver implements HandlerMethodArgumentResolver {
 
         // 토큰 검증
         if (!jwtService.verifyToken(token)) {
-            throw new RuntimeException(String.format("USER_ID를 가져오지 못했습니다. (%s - %s)", parameter.getClass(), parameter.getMethod()));
+            throw new UnauthorizedException(ErrorMessage.UNAUTHORIZED_TOKEN);
         }
 
         // 유저 아이디 반환
@@ -40,7 +42,7 @@ public class UserIdResolver implements HandlerMethodArgumentResolver {
         try {
             return Long.parseLong(tokenContents);
         } catch (NumberFormatException e) {
-            throw new RuntimeException(String.format("USER_ID를 가져오지 못했습니다. (%s - %s)", parameter.getClass(), parameter.getMethod()));
+            throw new UnauthorizedException(ErrorMessage.UNAUTHORIZED_TOKEN);
         }
     }
 }

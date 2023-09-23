@@ -1,5 +1,6 @@
 package com.scoup.server.domain;
 
+import com.scoup.server.dto.admin.PatchAdminCafeRequestDto;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -29,11 +30,32 @@ public class Cafe {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String imageUrl;
+
+    @Column
+    private String licenseeNumber;
+
+    @Column
+    private String runningTime;
+
+    @Column
+    private String phoneNumber;
 
     @JsonIgnoreProperties({"cafe"})
     @OneToMany(mappedBy="cafe", cascade = CascadeType.REMOVE)
     private List<Event> eventList;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="master_Id")
+    private User user;
+
+    public void patchCafe(PatchAdminCafeRequestDto requestDto){
+        this.name = requestDto.getName();
+        this.location = requestDto.getLocation();
+        this.licenseeNumber = requestDto.getLicenseeNumber();
+        this.phoneNumber = requestDto.getPhoneNumber();
+        this.runningTime = requestDto.getRunningTime();
+    }
 
 }

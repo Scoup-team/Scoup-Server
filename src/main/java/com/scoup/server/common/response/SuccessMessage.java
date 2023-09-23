@@ -34,11 +34,13 @@ public enum SuccessMessage {
     CREATE_VIDEO_SUCCESS(CREATED, "카페 생성에 성공했습니다."),
     SEARCH_CAFE_SUCCESS(OK, "카페 검색에 성공했습니다."),
     ADD_CAFE_SUCCESS(OK, "카페 추가에 성공했습니다."),
+    DELETE_CAFE_SUCCESS(OK, "카페 삭제에 성공했습니다."),
 
     /**
      * cafe
      */
     MENU_CHECK_SUCCESS(OK, "메뉴 조회 성공하였습니다."),
+    PATCH_CAFE_SUCCESS(OK, "가게 수정에 성공하였습니다."),
 
     /**
      * coupon
