@@ -28,7 +28,7 @@ public class AuthService {
     public SignupResponseDTO signupService(SignupRequestDTO requestDTO) {
         validateUserData(requestDTO);
 
-        final User newUser = userRepository.save(User.of(requestDTO));
+        final User newUser = userRepository.save(User.of(requestDTO, false));
         TokenServiceVO tokenServiceVO = registerToken(newUser);
 
         return SignupResponseDTO.builder()
@@ -82,6 +82,19 @@ public class AuthService {
         final TokenServiceVO token = TokenServiceVO.of(newAccessToken, refreshToken);
 
         return token;
+    }
+
+    @Transactional
+    public SignupResponseDTO adminSignupService(SignupRequestDTO requestDTO) {
+        validateUserData(requestDTO);
+
+        final User newUser = userRepository.save(User.of(requestDTO, true));
+        TokenServiceVO tokenServiceVO = registerToken(newUser);
+
+        return SignupResponseDTO.builder()
+            .accessToken(tokenServiceVO.getAccessToken())
+            .refreshToken(tokenServiceVO.getRefreshToken())
+            .build();
     }
 
 }

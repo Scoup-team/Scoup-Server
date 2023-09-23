@@ -5,7 +5,10 @@ import com.scoup.server.common.response.SuccessMessage;
 import com.scoup.server.config.resolver.UserId;
 import com.scoup.server.dto.Event.UpdateEventRequestDto;
 import com.scoup.server.dto.Event.EventResponseDto;
+import com.scoup.server.dto.auth.SignupRequestDTO;
+import com.scoup.server.dto.auth.SignupResponseDTO;
 import com.scoup.server.dto.cafe.AdminCafeReponseDto;
+import com.scoup.server.service.AuthService;
 import com.scoup.server.service.CafeService;
 
 import com.scoup.server.service.EventService;
@@ -23,6 +26,8 @@ public class AdminController {
     private final CafeService cafeService;
     private final EventService eventService;
     private final UserService userService;
+    private final AuthService authService;
+
     @PostMapping("/mypage/event")
     public ApiResponse addEvent(
             @RequestHeader Long cafeId,
@@ -71,5 +76,13 @@ public class AdminController {
         List<AdminCafeReponseDto> cafeList=userService.getAdminCafe(userId);
 
         return ApiResponse.success(SuccessMessage.ADMIN_CHECK_SUCCESS, cafeList);
+    }
+
+    @PostMapping("/auth/signup")
+    public ApiResponse<SignupResponseDTO> adminSignup(
+        @RequestBody SignupRequestDTO requestDTO
+    ){
+        SignupResponseDTO data = authService.adminSignupService(requestDTO);
+        return ApiResponse.success(SuccessMessage.SIGNUP_SUCCESS, data);
     }
 }
