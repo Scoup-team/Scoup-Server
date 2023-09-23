@@ -32,10 +32,11 @@ public class AdminController {
     @PostMapping("/mypage/event")
     public ApiResponse addEvent(
             @RequestHeader Long cafeId,
-            @RequestBody String content
+            @RequestBody String content,
+            @UserId Long userId
     ) {
 
-        cafeService.addEvent(cafeId, content);
+        cafeService.addEvent(cafeId, content, userId);
 
         return ApiResponse.success(SuccessMessage.HOME_CHECK_SUCCESS);
 
@@ -43,7 +44,7 @@ public class AdminController {
 
     @GetMapping("/mypage/event")
     public ApiResponse<List<EventResponseDto>> getEvent(
-            @RequestHeader Long cafeId
+            @RequestBody Long cafeId
     ){
 
         List<EventResponseDto> dto=cafeService.getEvent(cafeId);
@@ -54,18 +55,20 @@ public class AdminController {
     @PatchMapping("/mypage/event/{eventId}")
     public ApiResponse patchEvent(
             @PathVariable Long eventId,
-            @RequestBody UpdateEventRequestDto requestDto
+            @RequestBody UpdateEventRequestDto requestDto,
+            @UserId Long userId
             ){
-        eventService.patchEvent(eventId, requestDto);
+        eventService.patchEvent(eventId, requestDto, userId);
 
         return ApiResponse.success(SuccessMessage.EVENT_PATCH_SUCCESS);
     }
 
     @DeleteMapping("/mypage/event/{eventId}")
     public ApiResponse deleteEvent(
-            @PathVariable Long eventId
+            @PathVariable Long eventId,
+            @UserId Long userId
     ){
-        eventService.deleteEvent(eventId);
+        eventService.deleteEvent(eventId, userId);
 
         return ApiResponse.success(SuccessMessage.EVENT_DELETE_SUCCESS);
     }
@@ -104,5 +107,15 @@ public class AdminController {
     ) {
         cafeService.deleteCafe(shopId, userId);
         return ApiResponse.success(SuccessMessage.DELETE_CAFE_SUCCESS);
+    }
+
+    @PostMapping("/mypage/shop")
+    public ApiResponse addAdminShop(
+            @UserId Long userId,
+            @RequestBody AdminCafeRequestDto adminCafeRequestDto
+    ){
+        cafeService.addAdminCafe(userId, adminCafeRequestDto);
+
+        return ApiResponse.success(SuccessMessage.ADMIN_CHECK_SUCCESS);
     }
 }

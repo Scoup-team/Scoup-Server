@@ -16,9 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = false)
 public class EventService {
     private final EventRepository eventRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public void patchEvent(Long eventId, UpdateEventRequestDto requestDto){
+    public void patchEvent(Long eventId, UpdateEventRequestDto requestDto, Long adminUserId){
+
+        User adminUser=userRepository.findById(adminUserId)
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
+        if(!adminUser.getMaster()){
+            throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
+        }
+
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_EVENT_EXCEPTION));
 
@@ -26,7 +35,15 @@ public class EventService {
 
     }
 
-    public void deleteEvent(Long eventId){
+    public void deleteEvent(Long eventId, Long adminUserId){
+
+        User adminUser=userRepository.findById(adminUserId)
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
+        if(!adminUser.getMaster()){
+            throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
+        }
+
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_EVENT_EXCEPTION));
 
