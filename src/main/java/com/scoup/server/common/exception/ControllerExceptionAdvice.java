@@ -4,11 +4,13 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import com.scoup.server.common.response.ApiResponse;
 import com.scoup.server.controller.exception.BadRequestException;
 import com.scoup.server.controller.exception.NotFoundDataException;
 import com.scoup.server.controller.exception.TokenForbiddenException;
+import com.scoup.server.controller.exception.UnauthorizedException;
 import com.scoup.server.controller.exception.UserConflictException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,13 @@ public class ControllerExceptionAdvice {
     /**
      * 401 UNAUTHORIZED
      */
+    @ExceptionHandler({
+        UnauthorizedException.class
+    })
+    public ResponseEntity<ApiResponse> UnauthorizedException(BaseException exception) {
+        return ResponseEntity.status(UNAUTHORIZED)
+            .body(ApiResponse.error(exception.getError(), exception.getMessage()));
+    }
 
     /**
      * 403 FORBIDDEN

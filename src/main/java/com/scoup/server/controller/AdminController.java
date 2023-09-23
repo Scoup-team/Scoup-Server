@@ -5,6 +5,7 @@ import com.scoup.server.common.response.SuccessMessage;
 import com.scoup.server.config.resolver.UserId;
 import com.scoup.server.dto.Event.UpdateEventRequestDto;
 import com.scoup.server.dto.Event.EventResponseDto;
+import com.scoup.server.dto.admin.PatchAdminCafeRequestDto;
 import com.scoup.server.dto.auth.SignupRequestDTO;
 import com.scoup.server.dto.auth.SignupResponseDTO;
 import com.scoup.server.dto.cafe.AdminCafeReponseDto;
@@ -84,5 +85,24 @@ public class AdminController {
     ){
         SignupResponseDTO data = authService.adminSignupService(requestDTO);
         return ApiResponse.success(SuccessMessage.SIGNUP_SUCCESS, data);
+    }
+
+    @PatchMapping("/mypage/shop/{shopId}")
+    public ApiResponse patchAdminCafe(
+        @RequestBody PatchAdminCafeRequestDto requestDto,
+        @PathVariable Long shopId,
+        @UserId Long userId
+    ) {
+        cafeService.patchCafe(requestDto, shopId, userId);
+        return ApiResponse.success(SuccessMessage.PATCH_CAFE_SUCCESS);
+    }
+
+    @DeleteMapping("/mypage/shop/{shopId}")
+    public ApiResponse deleteAdminCafe(
+        @UserId Long userId,
+        @PathVariable Long shopId
+    ) {
+        cafeService.deleteCafe(shopId, userId);
+        return ApiResponse.success(SuccessMessage.DELETE_CAFE_SUCCESS);
     }
 }
