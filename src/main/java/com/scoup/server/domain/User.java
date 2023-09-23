@@ -54,12 +54,12 @@ public class User {
         this.password = requestDto.getNewPassword();
     }
 
-    public static User of(SignupRequestDTO requestDTO) {
+    public static User of(SignupRequestDTO requestDTO, Boolean isMaster) {
         return User.builder()
             .email(requestDTO.getEmail())
             .name(requestDTO.getName())
             .password(requestDTO.getPassword())
-            .master(false)
+            .master(isMaster)
             .nickname(requestDTO.getNickname())
             .build();
     }
