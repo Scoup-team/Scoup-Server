@@ -15,13 +15,7 @@ import com.scoup.server.service.MenuService;
 import com.scoup.server.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -45,10 +39,10 @@ public class HomeController {
     }
 
 
-    @PatchMapping("/home")
+    @DeleteMapping("/home")
     public ApiResponse deleteMainPage(
         @UserId Long userId,
-        @RequestHeader Long cafeId
+        @RequestBody Long cafeId
     ) {
         cafeService.deleteMainPageCafe(userId, cafeId);
 
@@ -71,7 +65,8 @@ public class HomeController {
     @GetMapping("/home/{shopId}/{stampId}")
     public ApiResponse<MenuResponseDto> getMenu(
         @PathVariable("shopId") Long shopId,
-        @PathVariable("stampId") Long orderId
+        @PathVariable("stampId") Long orderId,
+        @UserId Long userId
     ) {
 
         MenuResponseDto menuDto = menuService.getMenuList(shopId, orderId);
@@ -81,7 +76,8 @@ public class HomeController {
 
     @GetMapping("/home/{shopId}/event")
     public ApiResponse<List<EventResponseDto>> getEvent(
-        @PathVariable("shopId") Long shopId
+        @PathVariable("shopId") Long shopId,
+        @UserId Long userId
     ) {
         List<EventResponseDto> eventList = cafeService.getEvent(shopId);
 
@@ -100,7 +96,8 @@ public class HomeController {
 
     @PostMapping("/mypage/coupon/{couponId}")
     public ApiResponse useCoupon(
-        @PathVariable("couponId") Long couponId
+        @PathVariable("couponId") Long couponId,
+        @UserId Long userId
     ) {
         couponService.patchCoupon(couponId);
 

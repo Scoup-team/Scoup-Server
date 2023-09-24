@@ -93,7 +93,15 @@ public class CafeService {
         return dtoList;
     }
 
-    public void addEvent(Long cafeId, String content) {
+    public void addEvent(Long cafeId, String content, Long adminUserId) {
+
+        User adminUser=userRepository.findById(adminUserId)
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
+        if(!adminUser.getMaster()){
+            throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
+        }
+
         Cafe cafe = this.cafeRepository.findById(cafeId)
             .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
@@ -177,5 +185,25 @@ public class CafeService {
             .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
         cafe.patchCafe(requestDto);
+    }
+
+    public void addAdminCafe(Long adminUserId, AdminCafeRequestDto adminCafeRequestDto){
+        User adminUser=userRepository.findById(adminUserId)
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
+        if(!adminUser.getMaster()){
+            throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
+        }
+
+        Cafe cafe=Cafe.builder()
+                .name(adminCafeRequestDto.getShopName())
+                .phoneNumber(adminCafeRequestDto.getPhoneNumber())
+                .licenseeNumber(adminCafeRequestDto.getLicenseeNumber())
+                .runningTime(adminCafeRequestDto.getRunningTime())
+                .location(adminCafeRequestDto.getShopAddress())
+                .imageUrl(adminCafeRequestDto.getShopImageUrl())
+                .build();
+
+        cafeRepository.save(cafe);
     }
 }
