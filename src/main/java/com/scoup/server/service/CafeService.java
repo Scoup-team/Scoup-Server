@@ -10,6 +10,7 @@ import com.scoup.server.domain.User;
 import com.scoup.server.domain.UserOrder;
 import com.scoup.server.dto.Event.EventResponseDto;
 import com.scoup.server.dto.admin.PatchAdminCafeRequestDto;
+import com.scoup.server.dto.cafe.AdminCafeRequestDto;
 import com.scoup.server.dto.cafe.SearchCafeResponseDto;
 import com.scoup.server.dto.menu.ReceiptRequestDto;
 import com.scoup.server.dto.menu.ReceiptResponseDto;

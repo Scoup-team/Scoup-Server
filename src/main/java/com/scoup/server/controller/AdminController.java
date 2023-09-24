@@ -9,6 +9,7 @@ import com.scoup.server.dto.admin.PatchAdminCafeRequestDto;
 import com.scoup.server.dto.auth.SignupRequestDTO;
 import com.scoup.server.dto.auth.SignupResponseDTO;
 import com.scoup.server.dto.cafe.AdminCafeReponseDto;
+import com.scoup.server.dto.cafe.AdminCafeRequestDto;
 import com.scoup.server.service.AuthService;
 import com.scoup.server.service.CafeService;
 
