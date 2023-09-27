@@ -117,6 +117,6 @@ public class AdminController {
     ){
         cafeService.addAdminCafe(userId, adminCafeRequestDto);
 
-        return ApiResponse.success(SuccessMessage.ADMIN_CHECK_SUCCESS);
+        return ApiResponse.success(SuccessMessage.ADD_CAFE_SUCCESS);
     }
 }
