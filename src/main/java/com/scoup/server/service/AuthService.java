@@ -6,6 +6,7 @@ import com.scoup.server.controller.exception.NotFoundDataException;
 import com.scoup.server.controller.exception.TokenForbiddenException;
 import com.scoup.server.controller.exception.UserConflictException;
 import com.scoup.server.domain.User;
+import com.scoup.server.dto.auth.SigninRequestDTO;
 import com.scoup.server.dto.auth.SignupRequestDTO;
 import com.scoup.server.dto.auth.SignupResponseDTO;
 import com.scoup.server.dto.auth.TokenServiceVO;
@@ -35,19 +36,6 @@ public class AuthService {
             .accessToken(tokenServiceVO.getAccessToken())
             .refreshToken(tokenServiceVO.getRefreshToken())
             .build();
-    }
-
-    public void validateUserData(SignupRequestDTO requestDTO) {
-        userRepository.findFirstByPassword(requestDTO.getPassword())
-            .ifPresent(action -> {
-                throw new UserConflictException(ErrorMessage.CONFLICT_USER_PASSWORD_EXCEPTION);
-            });
-
-        userRepository.findByNickname(requestDTO.getNickname())
-            .ifPresent(action -> {
-                throw new UserConflictException(ErrorMessage.CONFLICT_USER_NICKNAME_EXCEPTION);
-            });
-
     }
 
     @Transactional
@@ -95,6 +83,37 @@ public class AuthService {
             .accessToken(tokenServiceVO.getAccessToken())
             .refreshToken(tokenServiceVO.getRefreshToken())
             .build();
+    }
+
+    @Transactional
+    public SignupResponseDTO signinService(SigninRequestDTO requestDTO) {
+
+        userRepository.findFirstByPassword(requestDTO.getPassword())
+            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
+        User user = userRepository.findByEmail(requestDTO.getEmail())
+            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
+
+        TokenServiceVO tokenServiceVO = registerToken(user);
+
+        return SignupResponseDTO.builder()
+            .accessToken(tokenServiceVO.getAccessToken())
+            .refreshToken(tokenServiceVO.getRefreshToken())
+            .build();
+    }
+
+    public void validateUserData(SignupRequestDTO requestDTO) {
+        userRepository.findFirstByPassword(requestDTO.getPassword())
+            .ifPresent(action -> {
+                throw new UserConflictException(ErrorMessage.CONFLICT_USER_PASSWORD_EXCEPTION);
+            });
+
+        userRepository.findByNickname(requestDTO.getNickname())
+            .ifPresent(action -> {
+                throw new UserConflictException(ErrorMessage.CONFLICT_USER_NICKNAME_EXCEPTION);
+            });
+
     }
 
 }
