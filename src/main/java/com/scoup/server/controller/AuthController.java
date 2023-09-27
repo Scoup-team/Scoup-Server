@@ -3,6 +3,7 @@ package com.scoup.server.controller;
 import com.scoup.server.common.response.ApiResponse;
 import com.scoup.server.common.response.SuccessMessage;
 import com.scoup.server.config.resolver.ServiceToken;
+import com.scoup.server.dto.auth.SigninRequestDTO;
 import com.scoup.server.dto.auth.SignupRequestDTO;
 import com.scoup.server.dto.auth.SignupResponseDTO;
 import com.scoup.server.dto.auth.TokenServiceVO;
@@ -30,6 +31,14 @@ public class AuthController {
     public ApiResponse<TokenServiceVO> reIssueToken(@ServiceToken TokenServiceVO token) {
         TokenServiceVO data = authService.reIssueToken(token);
         return ApiResponse.success(SuccessMessage.TOKEN_RE_ISSUE_SUCCESS, data);
+    }
+
+    @PostMapping("/auth/signin")
+    public ApiResponse<SignupResponseDTO> signin(
+        @RequestBody SigninRequestDTO requestDTO
+    ) {
+        SignupResponseDTO data = authService.signinService(requestDTO);
+        return ApiResponse.success(SuccessMessage.LOGIN_SUCCESS, data);
     }
 
 }
