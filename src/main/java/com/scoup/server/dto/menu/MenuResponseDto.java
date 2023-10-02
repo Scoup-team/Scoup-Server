@@ -10,6 +10,19 @@ import java.util.List;
 @Builder
 @Getter
 public class MenuResponseDto {
+    //스탬프 정보랑 메뉴 정보 전달
+    private Long id;
+    private Long cafeId;
+    private String cardName;
+    private String cardNum;
+
+    private String cafeName;
+    private String cafeLocation;
+    private String cafeImageUrl;
+    private String cafeLicenseeNumber;
+    private String cafePhoneNumber;
+    private String masterUser;
+
     @Builder.Default
-    private List<String> menu=new ArrayList<>();
+    private List<MenuDto> menu=new ArrayList<>();
 }

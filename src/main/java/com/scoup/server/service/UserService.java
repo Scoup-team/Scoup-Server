@@ -8,6 +8,7 @@ import com.scoup.server.domain.User;
 import com.scoup.server.domain.UserOrder;
 import com.scoup.server.dto.cafe.AdminCafeReponseDto;
 import com.scoup.server.dto.mainPage.MainPageCafeResponseDto;
+import com.scoup.server.dto.stamp.StampResponseDto;
 import com.scoup.server.dto.user.UpdateUserPasswordRequestDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
 import com.scoup.server.dto.user.UserDateResponseDto;
@@ -72,9 +73,10 @@ public class UserService {
         user.updateUserPassword(requestDto);
     }
 
-    public List<MainPageCafeResponseDto> findCafe(Long id) {
+    public List<MainPageCafeResponseDto> getCafe(Long id) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
         List<Long> cafeIdList = user.getCafeIdList();
         List<UserOrder> userOrderList = userOrderRepository.findByUser_Id(id);
 
@@ -85,9 +87,33 @@ public class UserService {
                 .orElseThrow(
                     () -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
-            int stamp =
-                (int) (userOrderList.stream().filter(a -> a.getMenu().getCafe().equals(c)).count());
+            //유저 아이디로 검색한 오더리스트 카페로 검색해 추려냄
+            List<UserOrder> tmpOrderList=
+                    userOrderList.stream().filter(a ->a.getMenu().getCafe().equals(c)).toList();
+
+            List<Long> tmpStampIdList=new ArrayList<>();
+            tmpOrderList.stream().distinct().forEach(a->tmpStampIdList.add(a.getStamp().getId()));//정상 출력되는거 확인
+
+            List<StampResponseDto> tmpStampList=new ArrayList<>();
+            //스탬프 id로 유저 오더 검색해서 메뉴 찾으면 될듯?
+
+            //이거 시간 되면 더 깔끔하게...
+            for(int j=0; j<tmpStampIdList.size(); j++){
+                //뭐라 하지
+                List<String> tmpMenuList=userOrderRepository.findByStamp_Id(tmpStampIdList.get(j)).stream()
+                        .map(a->a.getMenu().getName()).toList();
+
+                StampResponseDto tmpDto=StampResponseDto.builder()
+                        .stampId(tmpStampIdList.get(j))
+                        .menu(tmpMenuList)
+                        .build();
+
+                tmpStampList.add(tmpDto);
+            }
+
             List<Menu> tmpMenuList = menuRepository.findByCafe_Id(cafeIdList.get(i));
+
+            //추천 메뉴 3개 뽑는 코드
             tmpMenuList.sort(new Comparator<Menu>() {
                 @Override
                 public int compare(Menu o1, Menu o2) {
@@ -109,15 +135,13 @@ public class UserService {
                 tmpMenuList.stream().forEach(a -> menuImgList.add(a.getImageUrl()));
             }
 
-            //menuRepository.findByCafe_Id(cafeIdList.get(i)).stream().forEach(a->tmpMenuList.add(a.getName()));
-
             MainPageCafeResponseDto tmp = MainPageCafeResponseDto.builder()
                 .shopId(c.getId())
                 .name(c.getName())
                 .cafeImageUrl(c.getImageUrl())
                 .menu(menuNameList)
                 .menuImageUrl(menuImgList)
-                .stamp(stamp)
+                .stamp(tmpStampList)
                 .build();
 
             cafeList.add(tmp);

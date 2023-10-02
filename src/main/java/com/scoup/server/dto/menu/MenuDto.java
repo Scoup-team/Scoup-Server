@@ -14,6 +14,9 @@ public class MenuDto {
     private Long id;
     private String name;
     private Integer price;
-    private Cafe cafe;
-    private List<UserOrder> userOrderList;
+    private Integer num;
+
+    public void addNum(){
+        this.num++;
+    }
 }
