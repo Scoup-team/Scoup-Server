@@ -11,8 +11,12 @@ public class MainPageCafeResponseDto {
     private Long shopId;
     private String name;
     private String cafeImageUrl;
-    private int stamp;
-    private List<String> menu;
-    private List<String> menuImageUrl;
+
+    @Builder.Default
+    private List<StampResponseDto> stamp=new ArrayList<>();
+    @Builder.Default
+    private List<String> menu=new ArrayList<>();
+    @Builder.Default
+    private List<String> menuImageUrl=new ArrayList<>();
     //베스트 메뉴 사진과 이름 같이 넘겨줘야 함
 }

@@ -33,7 +33,7 @@ public class HomeController {
     public ApiResponse<List<MainPageCafeResponseDto>> getMainPage(
         @UserId Long userId
     ) {
-        List<MainPageCafeResponseDto> responseDto = userService.findCafe(userId);
+        List<MainPageCafeResponseDto> responseDto = userService.getCafe(userId);
 
         return ApiResponse.success(SuccessMessage.HOME_CHECK_SUCCESS, responseDto);
     }

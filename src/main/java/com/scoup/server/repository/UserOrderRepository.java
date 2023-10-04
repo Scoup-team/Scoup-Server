@@ -11,5 +11,6 @@ import java.util.List;
 public interface UserOrderRepository extends JpaRepository<UserOrder, Long> {
 
     List<UserOrder> findByUser_Id(Long id);
+    List<UserOrder> findByStamp_Id(Long id);
 
 }
