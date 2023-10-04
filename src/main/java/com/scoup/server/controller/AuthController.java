@@ -37,8 +37,15 @@ public class AuthController {
     public ApiResponse<SignupResponseDTO> signin(
         @RequestBody SigninRequestDTO requestDTO
     ) {
-        SignupResponseDTO data = authService.signinService(requestDTO);
+        SignupResponseDTO data = authService.signinService(requestDTO, false);
         return ApiResponse.success(SuccessMessage.LOGIN_SUCCESS, data);
     }
 
+    @PostMapping("/admin/auth/signin")
+    public ApiResponse<SignupResponseDTO> adminSignin(
+        @RequestBody SigninRequestDTO requestDTO
+    ) {
+        SignupResponseDTO data = authService.signinService(requestDTO, true);
+        return ApiResponse.success(SuccessMessage.LOGIN_SUCCESS, data);
+    }
 }
