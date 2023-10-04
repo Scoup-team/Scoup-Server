@@ -1,9 +1,14 @@
 package com.scoup.server.dto.menu;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.scoup.server.domain.Cafe;
+import com.scoup.server.domain.Event;
 import com.scoup.server.domain.Menu;
+import com.scoup.server.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
