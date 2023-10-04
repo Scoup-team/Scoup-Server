@@ -12,6 +12,7 @@ import com.scoup.server.controller.exception.NotFoundDataException;
 import com.scoup.server.controller.exception.TokenForbiddenException;
 import com.scoup.server.controller.exception.UnauthorizedException;
 import com.scoup.server.controller.exception.UserConflictException;
+import com.scoup.server.controller.exception.UserForbiddenException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,7 +47,8 @@ public class ControllerExceptionAdvice {
      * 403 FORBIDDEN
      */
     @ExceptionHandler({
-        TokenForbiddenException.class
+        TokenForbiddenException.class,
+        UserForbiddenException.class
     })
     public ResponseEntity<ApiResponse> ForbiddenException(BaseException exception) {
         return ResponseEntity.status(FORBIDDEN)

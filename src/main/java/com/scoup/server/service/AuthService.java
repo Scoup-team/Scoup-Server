@@ -5,6 +5,7 @@ import com.scoup.server.common.response.ErrorMessage;
 import com.scoup.server.controller.exception.NotFoundDataException;
 import com.scoup.server.controller.exception.TokenForbiddenException;
 import com.scoup.server.controller.exception.UserConflictException;
+import com.scoup.server.controller.exception.UserForbiddenException;
 import com.scoup.server.domain.User;
 import com.scoup.server.dto.auth.SigninRequestDTO;
 import com.scoup.server.dto.auth.SignupRequestDTO;
@@ -86,7 +87,7 @@ public class AuthService {
     }
 
     @Transactional
-    public SignupResponseDTO signinService(SigninRequestDTO requestDTO) {
+    public SignupResponseDTO signinService(SigninRequestDTO requestDTO, Boolean isMaster) {
 
         userRepository.findFirstByPassword(requestDTO.getPassword())
             .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
@@ -95,6 +96,12 @@ public class AuthService {
             .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
 
+        if(isMaster && !user.getMaster()) {
+            throw new UserForbiddenException(ErrorMessage.FORBIDDEN_ADMIN_EXCEPTION);
+        }
+        if(!isMaster && user.getMaster()) {
+            throw new UserForbiddenException(ErrorMessage.FORBIDDEN_USER_EXCEPTION);
+        }
         TokenServiceVO tokenServiceVO = registerToken(user);
 
         return SignupResponseDTO.builder()
