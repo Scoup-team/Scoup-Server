@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -91,7 +92,8 @@ public class UserService {
 
             //유저 아이디로 검색한 오더리스트 카페로 검색해 추려냄
             List<UserOrder> tmpOrderList=
-                    userOrderList.stream().filter(a ->a.getMenu().getCafe().equals(c)).toList();
+                    userOrderList.stream().filter(a ->a.getMenu().getCafe().equals(c)).collect(
+                        Collectors.toList());
 
             List<Long> tmpStampIdList=new ArrayList<>();
             tmpOrderList.stream().distinct().forEach(a->tmpStampIdList.add(a.getStamp().getId()));//정상 출력되는거 확인
@@ -103,7 +105,7 @@ public class UserService {
             for(int j=0; j<tmpStampIdList.size(); j++){
                 //뭐라 하지
                 List<String> tmpMenuList=userOrderRepository.findByStamp_Id(tmpStampIdList.get(j)).stream()
-                        .map(a->a.getMenu().getName()).toList();
+                        .map(a->a.getMenu().getName()).collect(Collectors.toList());
 
                 StampResponseDto tmpDto=StampResponseDto.builder()
                         .stampId(tmpStampIdList.get(j))
