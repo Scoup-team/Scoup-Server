@@ -189,6 +189,12 @@ public class CafeService {
     }
 
     public void addAdminCafe(Long adminUserId, AdminCafeRequestDto adminCafeRequestDto){
+        User adminUser=userRepository.findById(adminUserId)
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
+        if(!adminUser.getMaster()){
+            throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
+        }
 
         Cafe cafe=Cafe.builder()
                 .name(adminCafeRequestDto.getShopName())
@@ -197,6 +203,7 @@ public class CafeService {
                 .runningTime(adminCafeRequestDto.getRunningTime())
                 .location(adminCafeRequestDto.getShopAddress())
                 .imageUrl(adminCafeRequestDto.getShopImageUrl())
+                .user(adminUser)
                 .build();
 
         cafeRepository.save(cafe);

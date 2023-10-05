@@ -19,6 +19,7 @@ import com.scoup.server.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -82,10 +83,11 @@ public class UserService {
 
         List<MainPageCafeResponseDto> cafeList = new ArrayList<>();
 
+        //스탬프 처리 어떻게 할 것인가 유저 오더를 유저 id로 검색해서 스탬프 가져온 다음
+        //카페별로 갈라서 출력하면 될 것 같은데 이걸 어떻게 이쁘게 출력할지...
         for (int i = 0; i < cafeIdList.size(); i++) {
             Cafe c = cafeRepository.findById(cafeIdList.get(i))
-                .orElseThrow(
-                    () -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
             //유저 아이디로 검색한 오더리스트 카페로 검색해 추려냄
             List<UserOrder> tmpOrderList=
@@ -151,26 +153,19 @@ public class UserService {
     }
 
     public List<AdminCafeReponseDto> getAdminCafe(Long adminUserId){
-        User adminUser=userRepository.findById(adminUserId)
-                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
-        if(!adminUser.getMaster()){
-            throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
-        }
+        List<Cafe> tmpCafeList=cafeRepository.findByUser_Id(adminUserId);
 
-        List<Long> cafeIdList=adminUser.getCafeIdList();
         List<AdminCafeReponseDto> cafeList=new ArrayList<>();
 
-        for(int i=0; i<cafeIdList.size(); i++){
-            Cafe c=cafeRepository.findById(cafeIdList.get(i))
-                    .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+        for(int i=0; i<tmpCafeList.size(); i++){
 
             AdminCafeReponseDto tmp=AdminCafeReponseDto.builder()
-                    .shopId(c.getId())
-                    .shopName(c.getName())
+                    .shopId(tmpCafeList.get(i).getId())
+                    .shopName(tmpCafeList.get(i).getName())
                     //.shopBranch(c)
-                    .shopAddress(c.getLocation())
-                    .shopImageUrl(c.getImageUrl())
+                    .shopAddress(tmpCafeList.get(i).getLocation())
+                    .shopImageUrl(tmpCafeList.get(i).getImageUrl())
                     .build();
             cafeList.add(tmp);
         }

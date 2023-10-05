@@ -23,7 +23,7 @@ public class MenuService {
 	private final UserOrderRepository userOrderRepository;
 	private final StampRepository stampRepository;
 
-	public MenuResponseDto getMenuList(Long shopId, Long orderId){
+	public MenuResponseDto getMenuList(Long stampId){
 		Stamp stamp=stampRepository.findById(stampId)
 				.orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_COUPON_EXCEPTION));
 

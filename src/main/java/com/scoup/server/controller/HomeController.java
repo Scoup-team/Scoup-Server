@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("")
 public class HomeController {
 
     private final CafeService cafeService;
@@ -65,11 +64,11 @@ public class HomeController {
     @GetMapping("/home/{shopId}/{stampId}")
     public ApiResponse<MenuResponseDto> getMenu(
         @PathVariable("shopId") Long shopId,
-        @PathVariable("stampId") Long orderId,
+        @PathVariable("stampId") Long stampId,
         @UserId Long userId
     ) {
 
-        MenuResponseDto menuDto = menuService.getMenuList(shopId, orderId);
+        MenuResponseDto menuDto = menuService.getMenuList(stampId);
 
         return ApiResponse.success(SuccessMessage.MENU_CHECK_SUCCESS, menuDto);
     }

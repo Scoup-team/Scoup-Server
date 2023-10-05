@@ -1,6 +1,7 @@
 package com.scoup.server.repository;
 
 import com.scoup.server.domain.Cafe;
+import com.scoup.server.domain.Coupon;
 import com.scoup.server.domain.User;
 import java.util.List;
 import java.util.Optional;
@@ -14,4 +15,5 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
     List<Cafe> findAllCafeContainingKeyword(@Param("keyword") String keyword);
 
     Optional<Cafe> findByName(String name);
+    List<Cafe> findByUser_Id(Long id);
 }
