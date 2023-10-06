@@ -8,6 +8,7 @@ import com.scoup.server.domain.Menu;
 import com.scoup.server.domain.Stamp;
 import com.scoup.server.domain.User;
 import com.scoup.server.domain.UserOrder;
+import com.scoup.server.dto.Event.AddEventRequestDto;
 import com.scoup.server.dto.Event.EventResponseDto;
 import com.scoup.server.dto.admin.PatchAdminCafeRequestDto;
 import com.scoup.server.dto.cafe.AdminCafeRequestDto;
@@ -94,7 +95,9 @@ public class CafeService {
         return dtoList;
     }
 
-    public void addEvent(Long cafeId, String content, Long adminUserId) {
+    public void addEvent(AddEventRequestDto requestDto, Long adminUserId) {
+        Long cafeId=requestDto.getCafeId();
+        String content=requestDto.getContent();
 
         User adminUser=userRepository.findById(adminUserId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
@@ -207,5 +210,28 @@ public class CafeService {
                 .build();
 
         cafeRepository.save(cafe);
+    }
+
+    public List<EventResponseDto> getAdminEvent(Long userId, Long cafeId) {
+        Cafe cafe = this.cafeRepository.findById(cafeId)
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+
+        if(cafe.getUser().getId()!=userId){
+            throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
+        }
+
+        List<Event> eventList = cafe.getEventList();
+        List<EventResponseDto> dtoList = new ArrayList<>();
+
+        for (int i = 0; i < eventList.size(); i++) {
+            EventResponseDto tmp = EventResponseDto.builder()
+                    .eventId(eventList.get(i).getId())
+                    .content(eventList.get(i).getContent())
+                    .createdAt(eventList.get(i).getCreatedAt())
+                    .build();
+            dtoList.add(tmp);
+        }
+
+        return dtoList;
     }
 }
