@@ -3,6 +3,7 @@ package com.scoup.server.controller;
 import com.scoup.server.common.response.ApiResponse;
 import com.scoup.server.common.response.SuccessMessage;
 import com.scoup.server.config.resolver.UserId;
+import com.scoup.server.dto.Event.AddEventRequestDto;
 import com.scoup.server.dto.Event.UpdateEventRequestDto;
 import com.scoup.server.dto.Event.EventResponseDto;
 import com.scoup.server.dto.admin.PatchAdminCafeRequestDto;
@@ -15,10 +16,14 @@ import com.scoup.server.service.CafeService;
 
 import com.scoup.server.service.EventService;
 import com.scoup.server.service.UserService;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,12 +37,11 @@ public class AdminController {
 
     @PostMapping("/mypage/event")
     public ApiResponse addEvent(
-            @RequestHeader Long cafeId,
-            @RequestBody String content,
+            @RequestBody AddEventRequestDto requestDto,
             @UserId Long userId
     ) {
 
-        cafeService.addEvent(cafeId, content, userId);
+        cafeService .addEvent(requestDto, userId);
 
         return ApiResponse.success(SuccessMessage.HOME_CHECK_SUCCESS);
 
@@ -45,30 +49,30 @@ public class AdminController {
 
     @GetMapping("/mypage/event")
     public ApiResponse<List<EventResponseDto>> getEvent(
-            @RequestBody Long cafeId,
-            @UserId Long userId
+            @UserId Long userId,
+            @RequestBody Long cafeId
     ){
 
-        List<EventResponseDto> dto=cafeService.getEvent(cafeId);
+        List<EventResponseDto> dto=cafeService.getAdminEvent(userId, cafeId);
 
         return ApiResponse.success(SuccessMessage.EVENT_CHECK_SUCCESS, dto);
     }
 
     @PatchMapping("/mypage/event/{eventId}")
     public ApiResponse patchEvent(
+            @UserId Long userId,
             @PathVariable Long eventId,
-            @RequestBody UpdateEventRequestDto requestDto,
-            @UserId Long userId
+            @RequestBody UpdateEventRequestDto requestDto
             ){
         eventService.patchEvent(eventId, requestDto, userId);
 
         return ApiResponse.success(SuccessMessage.EVENT_PATCH_SUCCESS);
     }
 
-    @DeleteMapping("/mypage/event/{eventId}")
+    @DeleteMapping("/mypage/event")
     public ApiResponse deleteEvent(
-            @PathVariable Long eventId,
-            @UserId Long userId
+            @UserId Long userId,
+            @RequestBody Long eventId
     ){
         eventService.deleteEvent(eventId, userId);
 
@@ -94,9 +98,9 @@ public class AdminController {
 
     @PatchMapping("/mypage/shop/{shopId}")
     public ApiResponse patchAdminCafe(
+            @UserId Long userId,
         @RequestBody PatchAdminCafeRequestDto requestDto,
-        @PathVariable Long shopId,
-        @UserId Long userId
+        @PathVariable Long shopId
     ) {
         cafeService.patchCafe(requestDto, shopId, userId);
         return ApiResponse.success(SuccessMessage.PATCH_CAFE_SUCCESS);
