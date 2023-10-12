@@ -3,6 +3,8 @@ package com.scoup.server.dto.cafe;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.persistence.Column;
+
 @Getter
 @Builder
 public class AdminCafeReponseDto {
@@ -11,4 +13,7 @@ public class AdminCafeReponseDto {
     private String shopBranch;
     private String shopAddress;
     private String shopImageUrl;
+    private String runningTime;
+    private String phoneNumber;
+    private String licenseeNumber;
 }

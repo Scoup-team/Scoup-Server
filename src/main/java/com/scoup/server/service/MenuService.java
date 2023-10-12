@@ -27,7 +27,7 @@ public class MenuService {
 		Stamp stamp=stampRepository.findById(stampId)
 				.orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_COUPON_EXCEPTION));
 
-		List<UserOrder> userOrderList=userOrderRepository.findByStamp_Id(stampId);//중복 되는거 확인
+		List<UserOrder> userOrderList=userOrderRepository.findByStamp_Id(stampId);
 		//이제 메뉴 리턴하는데 수량이랑 가격 데이터를 같이 줘야함
 
 		List<MenuDto> tmpMenuList=new ArrayList<>();
@@ -49,7 +49,6 @@ public class MenuService {
 						.orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_MENU_EXCEPTION)).addNum();
 
 			}
-
 		}
 
 		return MenuResponseDto.builder()
