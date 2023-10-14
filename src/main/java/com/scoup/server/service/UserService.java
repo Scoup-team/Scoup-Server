@@ -154,24 +154,25 @@ public class UserService {
         return cafeList;
     }
 
-    public List<AdminCafeReponseDto> getAdminCafe(Long adminUserId){
+    public AdminCafeReponseDto getAdminCafe(Long adminUserId){
 
-        List<Cafe> tmpCafeList=cafeRepository.findByUser_Id(adminUserId);
+        List<Cafe> tmpCafe=cafeRepository.findByUser_Id(adminUserId);
 
-        List<AdminCafeReponseDto> cafeList=new ArrayList<>();
-
-        for(int i=0; i<tmpCafeList.size(); i++){
-
-            AdminCafeReponseDto tmp=AdminCafeReponseDto.builder()
-                    .shopId(tmpCafeList.get(i).getId())
-                    .shopName(tmpCafeList.get(i).getName())
-                    //.shopBranch(c)
-                    .shopAddress(tmpCafeList.get(i).getLocation())
-                    .shopImageUrl(tmpCafeList.get(i).getImageUrl())
-                    .build();
-            cafeList.add(tmp);
+        if(tmpCafe.size()!=1){
+            throw new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION);
         }
 
-        return cafeList;
+        AdminCafeReponseDto tmp=AdminCafeReponseDto.builder()
+                .shopId(tmpCafe.get(0).getId())
+                .shopName(tmpCafe.get(0).getName())
+                //.shopBranch(c)
+                .shopAddress(tmpCafe.get(0).getLocation())
+                .shopImageUrl(tmpCafe.get(0).getImageUrl())
+                .runningTime(tmpCafe.get(0).getRunningTime())
+                .phoneNumber(tmpCafe.get(0).getPhoneNumber())
+                .licenseeNumber(tmpCafe.get(0).getLicenseeNumber())
+                .build();
+
+        return tmp;
     }
 }

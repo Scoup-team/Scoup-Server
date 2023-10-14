@@ -67,13 +67,17 @@ public class CafeService {
     }
 
     @Transactional
-    public void deleteCafe(Long cafeId, Long userId) {
+    public void deleteCafe(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
-        Cafe cafe = cafeRepository.findById(cafeId)
-            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
-        cafeRepository.deleteById(cafe.getId());
+        List<Cafe> cafe=cafeRepository.findByUser_Id(userId);
+
+        if(cafe.size() != 1){
+            throw new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION);
+        }
+
+        cafeRepository.deleteById(cafe.get(0).getId());
     }
 
     public List<EventResponseDto> getEvent(Long cafeId) {
@@ -182,21 +186,27 @@ public class CafeService {
     }
 
     @Transactional
-    public void patchCafe(PatchAdminCafeRequestDto requestDto, Long shopId, Long userId){
+    public void patchCafe(PatchAdminCafeRequestDto requestDto, Long userId){
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
-        Cafe cafe = cafeRepository.findById(shopId)
-            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
-        cafe.patchCafe(requestDto);
+        List<Cafe> cafe=cafeRepository.findByUser_Id(userId);
+
+        if(cafe.size() != 1){
+            throw new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION);
+        }
+
+        cafe.get(0).patchCafe(requestDto);
     }
 
     public void addAdminCafe(Long adminUserId, AdminCafeRequestDto adminCafeRequestDto){
         User adminUser=userRepository.findById(adminUserId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
-        if(!adminUser.getMaster()){
-            throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
+        List<Cafe> tmpCafeList=cafeRepository.findByUser_Id(adminUserId);
+
+        if(!tmpCafeList.isEmpty()){
+            throw new NotFoundDataException(ErrorMessage.REDUPLICATION_CAFE_ADD_EXCEPTION);
         }
 
         Cafe cafe=Cafe.builder()

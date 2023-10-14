@@ -41,6 +41,7 @@ public enum ErrorMessage {
     NOT_FOUND_CAFE_EXCEPTION(NOT_FOUND, "카페를 찾을 수 없습니다."),
     NOT_FOUND_MENU_EXCEPTION(NOT_FOUND, "메뉴를 찾을 수 없습니다."),
     REDUPLICATION_CAFE_EXCEPTION(NOT_FOUND, "같은 가게를 추가할 수 없습니다."),
+    REDUPLICATION_CAFE_ADD_EXCEPTION(NOT_FOUND, "계정당 가게를 두 개 이상 추가할 수 없습니다."),
 
     /**
      * coupon

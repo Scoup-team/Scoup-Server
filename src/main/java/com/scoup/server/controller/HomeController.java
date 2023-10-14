@@ -61,9 +61,8 @@ public class HomeController {
     }
 
 
-    @GetMapping("/home/{shopId}/{stampId}")
+    @GetMapping("/home/{stampId}")
     public ApiResponse<MenuResponseDto> getMenu(
-        @PathVariable("shopId") Long shopId,
         @PathVariable("stampId") Long stampId,
         @UserId Long userId
     ) {

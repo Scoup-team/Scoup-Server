@@ -37,8 +37,8 @@ public class AdminController {
 
     @PostMapping("/mypage/event")
     public ApiResponse addEvent(
-            @RequestBody AddEventRequestDto requestDto,
-            @UserId Long userId
+            @UserId Long userId,
+            @RequestBody AddEventRequestDto requestDto
     ) {
 
         cafeService .addEvent(requestDto, userId);
@@ -80,12 +80,12 @@ public class AdminController {
     }
 
     @GetMapping("/mypage/shop")
-    public ApiResponse<List<AdminCafeReponseDto>> getAdminShop(
+    public ApiResponse<AdminCafeReponseDto> getAdminShop(
         @UserId Long userId
     ){
-        List<AdminCafeReponseDto> cafeList=userService.getAdminCafe(userId);
+        AdminCafeReponseDto cafe=userService.getAdminCafe(userId);
 
-        return ApiResponse.success(SuccessMessage.ADMIN_CHECK_SUCCESS, cafeList);
+        return ApiResponse.success(SuccessMessage.ADMIN_CHECK_SUCCESS, cafe);
     }
 
     @PostMapping("/auth/signup")
@@ -96,22 +96,21 @@ public class AdminController {
         return ApiResponse.success(SuccessMessage.SIGNUP_SUCCESS, data);
     }
 
-    @PatchMapping("/mypage/shop/{shopId}")
+    @PatchMapping("/mypage/shop")
     public ApiResponse patchAdminCafe(
-            @UserId Long userId,
-        @RequestBody PatchAdminCafeRequestDto requestDto,
-        @PathVariable Long shopId
+        @UserId Long userId,
+        @RequestBody PatchAdminCafeRequestDto requestDto
     ) {
-        cafeService.patchCafe(requestDto, shopId, userId);
+        cafeService.patchCafe(requestDto, userId);
         return ApiResponse.success(SuccessMessage.PATCH_CAFE_SUCCESS);
     }
 
-    @DeleteMapping("/mypage/shop/{shopId}")
+    @DeleteMapping("/mypage/shop")
     public ApiResponse deleteAdminCafe(
-        @UserId Long userId,
-        @PathVariable Long shopId
+        @UserId Long userId
     ) {
-        cafeService.deleteCafe(shopId, userId);
+        cafeService.deleteCafe(userId);
+
         return ApiResponse.success(SuccessMessage.DELETE_CAFE_SUCCESS);
     }
 

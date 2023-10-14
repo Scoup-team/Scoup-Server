@@ -56,6 +56,7 @@ public class Cafe {
         this.licenseeNumber = requestDto.getLicenseeNumber();
         this.phoneNumber = requestDto.getPhoneNumber();
         this.runningTime = requestDto.getRunningTime();
+        this.imageUrl=requestDto.getImageUrl();
     }
 
 }
