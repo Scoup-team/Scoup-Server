@@ -2,12 +2,7 @@ package com.scoup.server.service;
 
 import com.scoup.server.common.response.ErrorMessage;
 import com.scoup.server.controller.exception.NotFoundDataException;
-import com.scoup.server.domain.Cafe;
-import com.scoup.server.domain.Event;
-import com.scoup.server.domain.Menu;
-import com.scoup.server.domain.Stamp;
-import com.scoup.server.domain.User;
-import com.scoup.server.domain.UserOrder;
+import com.scoup.server.domain.*;
 import com.scoup.server.dto.Event.AddEventRequestDto;
 import com.scoup.server.dto.Event.EventResponseDto;
 import com.scoup.server.dto.admin.PatchAdminCafeRequestDto;
@@ -15,12 +10,8 @@ import com.scoup.server.dto.cafe.AdminCafeRequestDto;
 import com.scoup.server.dto.cafe.SearchCafeResponseDto;
 import com.scoup.server.dto.menu.ReceiptRequestDto;
 import com.scoup.server.dto.menu.ReceiptResponseDto;
-import com.scoup.server.repository.CafeRepository;
-import com.scoup.server.repository.EventRepository;
-import com.scoup.server.repository.MenuRepository;
-import com.scoup.server.repository.StampRepository;
-import com.scoup.server.repository.UserOrderRepository;
-import com.scoup.server.repository.UserRepository;
+import com.scoup.server.repository.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +34,7 @@ public class CafeService {
     private final UserOrderRepository userOrderRepository;
     private final MenuRepository menuRepository;
     private final StampRepository stampRepository;
+    private final CouponRepository couponRepository;
 
     public List<SearchCafeResponseDto> searchCafe(Long userId, String keyword) {
         User user = userRepository.findById(userId)
@@ -168,6 +160,15 @@ public class CafeService {
                 }
             });
 
+        //코드 추가분, 스탬프 12개면 쿠폰 하나 추가
+        List<Stamp> stampList=stampRepository.findByUser_Id(user.getId());
+
+        //스탬프 12개인지 확인
+        if((stampList.size()%12)==0){
+            createCoupon(user, "아이스 아메리카노 1잔", cafe);
+        }
+
+
         return ReceiptResponseDto.builder()
             .store(cafe.getName())
             .cardNum(requestDto.getCardNum())
@@ -183,6 +184,21 @@ public class CafeService {
             .menu(menu)
             .stamp(stamp)
             .build());
+    }
+
+    public void createCoupon(User user, String content, Cafe cafe){
+        //스탬프 12개 채우면 쿠폰 하나 추가
+        couponRepository.save(Coupon.builder()
+                .content(content)
+                .createdAt(LocalDateTime.now())
+                .period(100)
+                .used(false)
+                .user(user)
+                .cafe(cafe)
+                .build()
+        );
+
+
     }
 
     @Transactional
