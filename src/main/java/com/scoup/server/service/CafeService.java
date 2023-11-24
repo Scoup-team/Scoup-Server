@@ -161,8 +161,8 @@ public class CafeService {
             });
 
         //코드 추가분, 스탬프 12개면 쿠폰 하나 추가
-        List<Stamp> stampList=stampRepository.findByUser_Id(user.getId());
-
+        List<Stamp> tmpList=stampRepository.findByUser_Id(user.getId());
+        List<Stamp> stampList=tmpList.stream().filter(a->a.getCafe()==cafe).toList();
         //스탬프 12개인지 확인
         if((stampList.size()%12)==0){
             createCoupon(user, "아이스 아메리카노 1잔", cafe);
@@ -198,7 +198,15 @@ public class CafeService {
                 .build()
         );
 
+        //스탬프 삭제
+        List<Stamp> tmplist=stampRepository.findByUser_Id(user.getId());
 
+        for(int i=0; i<tmplist.size(); i++){
+            if(tmplist.get(i).getCafe()==cafe){
+                userOrderRepository.deleteAll(userOrderRepository.findByStamp_Id(tmplist.get(i).getId()));
+                stampRepository.delete(tmplist.get(i));
+            }
+        }
     }
 
     @Transactional

@@ -105,6 +105,7 @@ public class AuthService {
         TokenServiceVO tokenServiceVO = registerToken(user);
 
         return SignupResponseDTO.builder()
+            .nickname(user.getNickname())
             .accessToken(tokenServiceVO.getAccessToken())
             .refreshToken(tokenServiceVO.getRefreshToken())
             .build();
