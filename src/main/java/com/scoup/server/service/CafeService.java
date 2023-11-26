@@ -162,7 +162,7 @@ public class CafeService {
 
         //코드 추가분, 스탬프 12개면 쿠폰 하나 추가
         List<Stamp> tmpList=stampRepository.findByUser_Id(user.getId());
-        List<Stamp> stampList=tmpList.stream().filter(a->a.getCafe()==cafe).toList();
+        List<Stamp> stampList=tmpList.stream().filter(a->a.getCafe()==cafe).collect(Collectors.toList());
         //스탬프 12개인지 확인
         if((stampList.size()%12)==0){
             createCoupon(user, "아이스 아메리카노 1잔", cafe);
