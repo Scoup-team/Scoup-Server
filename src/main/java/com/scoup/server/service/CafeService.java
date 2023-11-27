@@ -2,6 +2,7 @@ package com.scoup.server.service;
 
 import com.scoup.server.common.response.ErrorMessage;
 import com.scoup.server.controller.exception.NotFoundDataException;
+import com.scoup.server.controller.exception.UserForbiddenException;
 import com.scoup.server.domain.*;
 import com.scoup.server.dto.Event.AddEventRequestDto;
 import com.scoup.server.dto.Event.EventResponseDto;
@@ -250,8 +251,15 @@ public class CafeService {
         Cafe cafe = this.cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
 
+        User user=userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
         if(cafe.getUser().getId()!=userId){
-            throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
+            throw new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION);
+        }
+
+        if(!user.getMaster()){
+            throw new UserForbiddenException(ErrorMessage.FORBIDDEN_USER_EXCEPTION);
         }
 
         List<Event> eventList = cafe.getEventList();
