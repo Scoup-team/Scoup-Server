@@ -51,6 +51,7 @@ public enum SuccessMessage {
      * event
      */
     EVENT_CHECK_SUCCESS(OK, "이벤트 조회 성공하였습니다."),
+    EVENT_ADD_SUCCESS(OK, "이벤트 추가 성공하였습니다."),
     EVENT_PATCH_SUCCESS(OK, "이벤트 수정 성공하였습니다."),
     EVENT_DELETE_SUCCESS(OK, "이벤트 삭제 성공하였습니다."),
 

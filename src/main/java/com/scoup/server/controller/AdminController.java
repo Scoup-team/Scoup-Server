@@ -43,17 +43,16 @@ public class AdminController {
 
         cafeService .addEvent(requestDto, userId);
 
-        return ApiResponse.success(SuccessMessage.HOME_CHECK_SUCCESS);
+        return ApiResponse.success(SuccessMessage.EVENT_ADD_SUCCESS);
 
     }
 
     @GetMapping("/mypage/event")
     public ApiResponse<List<EventResponseDto>> getEvent(
-            @UserId Long userId,
-            @RequestBody Long cafeId
+            @UserId Long userId
     ){
 
-        List<EventResponseDto> dto=cafeService.getAdminEvent(userId, cafeId);
+        List<EventResponseDto> dto=cafeService.getAdminEvent(userId);
 
         return ApiResponse.success(SuccessMessage.EVENT_CHECK_SUCCESS, dto);
     }
