@@ -4,6 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class AddEventRequestDto {
-    private Long cafeId;
     private String content;
 }

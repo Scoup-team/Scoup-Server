@@ -93,7 +93,7 @@ public class CafeService {
     }
 
     public void addEvent(AddEventRequestDto requestDto, Long adminUserId) {
-        Long cafeId=requestDto.getCafeId();
+        //Long cafeId=requestDto.getCafeId();
         String content=requestDto.getContent();
 
         User adminUser=userRepository.findById(adminUserId)
@@ -103,17 +103,25 @@ public class CafeService {
             throw new NotFoundDataException(ErrorMessage.NOT_ADMIN_EXCEPTION);
         }
 
-        Cafe cafe = this.cafeRepository.findById(cafeId)
-            .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+        List<Cafe> cafeList = this.cafeRepository.findByUser_Id(adminUserId);
+
+        if(cafeList.isEmpty()){
+            throw new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION);
+        }
+
+        if(cafeList.size()>1){
+            //혹시 같아이디로 카페 하나 이상 만들어질까봐 넣음
+            throw new NotFoundDataException(ErrorMessage.REDUPLICATION_CAFE_ADD_EXCEPTION);
+        }
 
         Event event = Event.builder()
             .createdAt(LocalDateTime.now())
             .content(content)
-            .cafe(cafe)
+            .cafe(cafeList.get(0))
             .build();
 
         eventRepository.save(event);
-        cafe.getEventList().add(event);
+        cafeList.get(0).getEventList().add(event);
     }
 
     public void deleteMainPageCafe(Long userId, Long cafeId) {
@@ -247,22 +255,27 @@ public class CafeService {
         cafeRepository.save(cafe);
     }
 
-    public List<EventResponseDto> getAdminEvent(Long userId, Long cafeId) {
-        Cafe cafe = this.cafeRepository.findById(cafeId)
-                .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION));
+    public List<EventResponseDto> getAdminEvent(Long userId) {
 
         User user=userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
-
-        if(cafe.getUser().getId()!=userId){
-            throw new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION);
-        }
 
         if(!user.getMaster()){
             throw new UserForbiddenException(ErrorMessage.FORBIDDEN_USER_EXCEPTION);
         }
 
-        List<Event> eventList = cafe.getEventList();
+        List<Cafe> cafeList=this.cafeRepository.findByUser_Id(userId);
+
+        if(cafeList.isEmpty()){
+            throw new NotFoundDataException(ErrorMessage.NOT_FOUND_CAFE_EXCEPTION);
+        }
+
+        if(cafeList.size()>1){
+            //혹시 같아이디로 카페 하나 이상 만들어질까봐 넣음
+            throw new NotFoundDataException(ErrorMessage.REDUPLICATION_CAFE_ADD_EXCEPTION);
+        }
+
+        List<Event> eventList = cafeList.get(0).getEventList();
         List<EventResponseDto> dtoList = new ArrayList<>();
 
         for (int i = 0; i < eventList.size(); i++) {
