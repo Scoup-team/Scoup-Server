@@ -26,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.scoup.server.config.hashconvert.PasswordConverter.encode;
+
 @Service
 @Builder
 @RequiredArgsConstructor
@@ -68,11 +70,19 @@ public class UserService {
     public void patchUserPassword(Long userId, UpdateUserPasswordRequestDto requestDto) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+        /*
         userRepository.findFirstByPassword(requestDto.getOriginPassword())
             .orElseThrow(
                 () -> new NotFoundDataException(ErrorMessage.NOT_FOUND_USER_PASSWORD_EXCEPTION));
+         */
 
-        user.updateUserPassword(requestDto);
+        String newPassword=encode(requestDto.getNewPassword());
+
+        if(newPassword.equals(user.getPassword())){
+            throw new NotFoundDataException(ErrorMessage.SAME_PASSWORD_EXCEPTION);
+        }
+
+        user.updateUserPassword(newPassword);
     }
 
     public List<MainPageCafeResponseDto> getCafe(Long id) {

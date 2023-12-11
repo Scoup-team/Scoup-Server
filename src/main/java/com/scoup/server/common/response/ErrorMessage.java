@@ -29,6 +29,7 @@ public enum ErrorMessage {
     UNAUTHORIZED_TOKEN(UNAUTHORIZED, "USER_ID를 가져오지 못했습니다."),
     NOT_FOUND_USER_EXCEPTION(NOT_FOUND, "유저를 찾을 수 없습니다."),
     NOT_FOUND_USER_PASSWORD_EXCEPTION(NOT_FOUND, "잘못된 비밀번호입니다."),
+    SAME_PASSWORD_EXCEPTION(NOT_FOUND, "이전 비밀번호와 같은 비밀번호입니다."),
     CONFLICT_USER_PASSWORD_EXCEPTION(CONFLICT, "존재하는 유저 비밀번호 입니다."),
     CONFLICT_USER_NICKNAME_EXCEPTION(CONFLICT, "존재하는 유저 닉네임 입니다."),
     NOT_ADMIN_EXCEPTION(NOT_FOUND, "어드민 유저가 아닙니다."),

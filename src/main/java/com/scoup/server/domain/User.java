@@ -1,5 +1,6 @@
 package com.scoup.server.domain;
 
+import com.scoup.server.config.hashconvert.PasswordConverter;
 import com.scoup.server.dto.auth.SignupRequestDTO;
 import com.scoup.server.dto.user.UpdateUserPasswordRequestDto;
 import com.scoup.server.dto.user.UpdateUserRequestDto;
@@ -20,6 +21,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Convert(converter = PasswordConverter.class, attributeName = "password")
 public class User {
 
     @Id
@@ -33,6 +35,7 @@ public class User {
     private String nickname;
 
     @Column(nullable = false)
+    @Convert(converter = PasswordConverter.class)
     private String password;
 
     @Column(nullable = false)
@@ -50,8 +53,8 @@ public class User {
         this.nickname = requestDto.getNickname();
     }
 
-    public void updateUserPassword(UpdateUserPasswordRequestDto requestDto) {
-        this.password = requestDto.getNewPassword();
+    public void updateUserPassword(String newPassword) {
+        this.password = newPassword;
     }
 
     public static User of(SignupRequestDTO requestDTO, Boolean isMaster) {
